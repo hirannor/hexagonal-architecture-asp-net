@@ -9,6 +9,6 @@ internal class UserToModelMapper : IFunction<User, UserModel>
     {
         if (input is null) return null;
 
-        return UserModel.From(input.Id.Value, input.FullName, input.Age);
+        return UserModel.From(input.Id.Value, input.EmailAddress, input.FullName, input.Age);
     }
 }

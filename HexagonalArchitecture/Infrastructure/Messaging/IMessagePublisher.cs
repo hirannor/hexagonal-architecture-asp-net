@@ -1,4 +1,4 @@
-﻿namespace HexagonalArchitecture.Infrastructure;
+﻿namespace HexagonalArchitecture.Infrastructure.Messaging;
 
 public interface IMessagePublisher
 {

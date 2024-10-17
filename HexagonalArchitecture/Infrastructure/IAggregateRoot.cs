@@ -1,4 +1,6 @@
-﻿namespace HexagonalArchitecture.Infrastructure;
+﻿using HexagonalArchitecture.Infrastructure.Eventing;
+
+namespace HexagonalArchitecture.Infrastructure;
 
 public interface IAggregateRoot
 {

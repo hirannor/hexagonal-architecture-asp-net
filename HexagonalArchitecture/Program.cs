@@ -1,6 +1,8 @@
 using HexagonalArchitecture.Adapter.Messaging.EventBus;
+using HexagonalArchitecture.Adapter.Notification.Mock;
 using HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 using HexagonalArchitecture.Application.Extensions;
+using HexagonalArchitecture.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,8 @@ builder.Services.AddDbContext<UserContext>(options => options.UseInMemoryDatabas
 builder.Services.AddApplicationServices();
 builder.Services.AddEventBusExtensions();
 builder.Services.AddPersistenceEfExtensions();
+builder.Services.AddMockEmailNotificationExtensions();
+builder.Services.AddInfrastructureExtensions();
 
 var app = builder.Build();
 

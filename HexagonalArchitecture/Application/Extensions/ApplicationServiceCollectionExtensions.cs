@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserDisplay, UserManagementService>();
         services.AddScoped<IUserDeletion, UserManagementService>();
         services.AddScoped<IEventPublishing, EventPublisherService>();
+        services.AddSingleton<INotificationSending, NotificationService>();
 
         return services;
     }

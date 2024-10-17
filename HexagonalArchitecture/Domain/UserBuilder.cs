@@ -3,6 +3,7 @@
     public class UserBuilder
     {
         private UserId _id;
+        private string _emailAddress;
         private string _fullName;
         private int _age;
 
@@ -14,6 +15,12 @@
         public UserBuilder UserId(UserId userId)
         {
             _id = userId;
+            return this;
+        }
+
+        public UserBuilder EmailAddress(string emailAddress)
+        {
+            _emailAddress = emailAddress;
             return this;
         }
 
@@ -31,7 +38,7 @@
 
         public User CreateUser()
         {
-            return new User(_id, _fullName, _age);
+            return new User(_id, _emailAddress, _fullName, _age);
         }
     }
 }

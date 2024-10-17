@@ -9,6 +9,6 @@ internal class CreateUserModelToDomainMapper : IFunction<CreateUserModel, Create
     {
         if (input is null) return null;
 
-        return CreateUser.Create(input.FullName, input.Age);
+        return CreateUser.Create(input.EmailAddress, input.FullName, input.Age);
     }
 }

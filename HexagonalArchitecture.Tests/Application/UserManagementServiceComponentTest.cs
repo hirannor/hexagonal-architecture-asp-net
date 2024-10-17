@@ -4,7 +4,7 @@ using HexagonalArchitecture.Application;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
-using HexagonalArchitecture.Infrastructure;
+using HexagonalArchitecture.Infrastructure.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -31,10 +31,11 @@ public class UserManagementServiceComponentTest
     [DisplayName("should create and store a new user")]
     public async void TestCreateUser()
     {
+        const string emailAddress = "john.doe@example.com";
         const string fullName = "John Doe";
         const int age = 32;
-        var cmd = CreateUser.Create(fullName, age);
-        var expected = User.From(UserId.Generate(), fullName, age);
+        var cmd = CreateUser.Create(emailAddress, fullName, age);
+        var expected = User.From(UserId.Generate(), emailAddress, fullName, age);
 
         _repository.Setup(users => users.Insert(It.IsAny<User>()))
             .Returns(Task.CompletedTask);

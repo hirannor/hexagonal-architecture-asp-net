@@ -2,24 +2,28 @@
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Domain.Event;
 using HexagonalArchitecture.Infrastructure;
+using HexagonalArchitecture.Infrastructure.Eventing;
 
 namespace HexagonalArchitecture.Domain
 {
-    public class User(UserId id, string fullName, int age) : IAggregateRoot
+    public class User(UserId id, string emailAddress, string fullName, int age) : IAggregateRoot
     {
         [field: Required] public UserId Id { get; init; } = id;
 
-        public string FullName { get; init; } = fullName;
+        [field: Required] public string EmailAddress { get; } = emailAddress;
 
-        public int Age { get; init; } = age;
+        [field: Required] public string FullName { get; init; } = fullName;
 
-        private List<DomainEvent> _domainEvents = [];
+        [field: Required] public int Age { get; init; } = age;
 
-        public static User From(UserId id, string fullName, int age)
+        private readonly List<DomainEvent> _domainEvents = [];
+
+        public static User From(UserId id, string emailAddress, string fullName, int age)
         {
             return UserBuilder
                 .Empty()
                 .UserId(id)
+                .EmailAddress(emailAddress)
                 .FullName(fullName)
                 .Age(age)
                 .CreateUser();
@@ -37,11 +41,12 @@ namespace HexagonalArchitecture.Domain
             var newUser = UserBuilder
                 .Empty()
                 .UserId(id)
+                .EmailAddress(cmd.EmailAddress)
                 .FullName(cmd.FullName)
                 .Age(cmd.Age)
                 .CreateUser();
 
-            newUser._domainEvents.Add(UserCreated.Issue(id));
+            newUser._domainEvents.Add(UserCreated.Issue(id, cmd.EmailAddress));
 
             return newUser;
         }
@@ -54,10 +59,6 @@ namespace HexagonalArchitecture.Domain
         public List<DomainEvent> ListEvents()
         {
             return [.._domainEvents];
-        }
-
-        public User(string fullName, int age) : this(null, fullName, age)
-        {
         }
     }
 }

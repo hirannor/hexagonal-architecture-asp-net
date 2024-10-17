@@ -1,5 +1,5 @@
 ﻿using HexagonalArchitecture.Application.UseCase;
-using HexagonalArchitecture.Infrastructure;
+using HexagonalArchitecture.Infrastructure.Messaging;
 
 namespace HexagonalArchitecture.Application;
 

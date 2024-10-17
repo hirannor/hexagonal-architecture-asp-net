@@ -1,4 +1,4 @@
-﻿using HexagonalArchitecture.Infrastructure;
+﻿using HexagonalArchitecture.Infrastructure.Messaging;
 
 namespace HexagonalArchitecture.Adapter.Messaging.EventBus;
 
