@@ -1,17 +1,27 @@
-﻿using HexagonalArchitecture.Infrastructure.Eventing;
+﻿using HexagonalArchitecture.Infrastructure.Database;
+using HexagonalArchitecture.Infrastructure.Eventing;
 
-namespace HexagonalArchitecture.Infrastructure;
-
-public class StartupHostedService(EventBusInitializer eventBusInitializer) : IHostedService
+namespace HexagonalArchitecture.Infrastructure
 {
-    public Task StartAsync(CancellationToken cancellationToken)
+    public class StartupHostedService(
+        EventBusInitializer eventBusInitializer,
+        IServiceProvider serviceProvider)
+        : IHostedService
     {
-        eventBusInitializer.Initialize();
-        return Task.CompletedTask;
-    }
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var dbMigrator = scope.ServiceProvider.GetRequiredService<IDatabaseMigrator>();
+                await dbMigrator.MigrateAsync(cancellationToken);
+            }
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
+            eventBusInitializer.Initialize();
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

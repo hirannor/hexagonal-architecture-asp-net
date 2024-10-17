@@ -54,8 +54,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
 
             if (domain is null)
             {
-                var details =
-                    ProblemDetailsFactory.CreateProblemDetails(HttpContext, 404, $"User not found with id: {userId}");
+                var details = CreateUserNotFoundProblemDetailsFor(userId);
                 return NotFound(details);
             }
 
@@ -74,12 +73,22 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
 
             if (domain is null)
             {
-                return NotFound($"User not found with id {userId}");
+                var details = CreateUserNotFoundProblemDetailsFor(userId);
+                return NotFound(details);
             }
 
             await userDeletion.DeleteBy(userId);
 
             return NoContent();
+        }
+
+        private ProblemDetails CreateUserNotFoundProblemDetailsFor(UserId userId)
+        {
+            return ProblemDetailsFactory.CreateProblemDetails(
+                HttpContext,
+                404,
+                $"User not found with id: {userId}"
+            );
         }
     }
 }
