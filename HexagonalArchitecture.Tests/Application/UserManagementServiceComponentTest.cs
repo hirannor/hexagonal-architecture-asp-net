@@ -34,7 +34,7 @@ public class UserManagementServiceComponentTest
         const string emailAddress = "john.doe@example.com";
         const string fullName = "John Doe";
         const int age = 32;
-        var cmd = CreateUser.Create(emailAddress, fullName, age);
+        var cmd = CreateUser.Issue(EmailAddress.From(emailAddress), fullName, Age.From(age));
         var expected = User.From(UserId.Generate(), EmailAddress.From(emailAddress), fullName, Age.From(age));
 
         _repository.Setup(users => users.Insert(It.IsAny<User>()))
@@ -44,7 +44,7 @@ public class UserManagementServiceComponentTest
         var result = await _userManagementService.CreateBy(cmd);
 
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(expected, options => options.Excluding(user => user.userId));
+        result.Should().BeEquivalentTo(expected, options => options.Excluding(user => user.UserId));
 
         // verify mocks
     }

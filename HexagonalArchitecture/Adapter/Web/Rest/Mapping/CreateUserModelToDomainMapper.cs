@@ -1,4 +1,5 @@
-﻿using HexagonalArchitecture.Domain.Command;
+﻿using HexagonalArchitecture.Domain;
+using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 
 namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping;
@@ -9,6 +10,6 @@ internal class CreateUserModelToDomainMapper : IFunction<CreateUserModel, Create
     {
         if (input is null) return null;
 
-        return CreateUser.Create(input.EmailAddress, input.FullName, input.Age);
+        return CreateUser.Issue(EmailAddress.From(input.EmailAddress), input.FullName, Age.From(input.Age));
     }
 }

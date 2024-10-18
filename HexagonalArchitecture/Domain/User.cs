@@ -8,13 +8,13 @@ namespace HexagonalArchitecture.Domain
 {
     public class User(UserId userId, EmailAddress emailAddress, string fullName, Age age) : IAggregateRoot
     {
-        [field: Required] public UserId userId { get; } = userId;
+        [field: Required] public UserId UserId { get; } = userId;
 
-        [field: Required] public EmailAddress EmailAddress { get; } = emailAddress;
+        [field: Required] public EmailAddress EmailAddress { get; set; } = emailAddress;
 
-        [field: Required] public string FullName { get; } = fullName;
+        [field: Required] public string FullName { get; set; } = fullName;
 
-        [field: Required] public Age Age { get; } = age;
+        [field: Required] public Age Age { get; set; } = age;
 
         private readonly List<DomainEvent> _domainEvents = [];
 
@@ -29,6 +29,17 @@ namespace HexagonalArchitecture.Domain
                 .CreateUser();
         }
 
+        public User ChangeBy(ChangeUserDetails cmd)
+        {
+            EmailAddress = cmd.EmailAddress;
+            FullName = cmd.FullName;
+            Age = cmd.Age;
+
+            _domainEvents.Add(UserDetailsChanged.Issue(cmd.EmailAddress, cmd.FullName, cmd.Age));
+
+            return this;
+        }
+
         public static User Create(CreateUser cmd)
         {
             if (cmd == null)
@@ -41,9 +52,9 @@ namespace HexagonalArchitecture.Domain
             var newUser = UserBuilder
                 .Empty()
                 .UserId(id)
-                .EmailAddress(EmailAddress.From(cmd.EmailAddress))
+                .EmailAddress(cmd.EmailAddress)
                 .FullName(cmd.FullName)
-                .Age(Age.From(cmd.Age))
+                .Age(cmd.Age)
                 .CreateUser();
 
             newUser._domainEvents.Add(UserCreated.Issue(id, cmd.EmailAddress));

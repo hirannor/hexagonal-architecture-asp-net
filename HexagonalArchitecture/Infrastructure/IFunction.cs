@@ -2,5 +2,5 @@
 
 public interface IFunction<in T, out TD>
 {
-    public TD Apply(T input);
+    TD Apply(T input);
 }

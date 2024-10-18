@@ -17,7 +17,7 @@ public class EventBusIngestionHandler(ILogger<EventBusIngestionHandler> logger, 
             case UserCreated userCreated:
                 logger.LogDebug("Handling UserCreated event: {evt}", userCreated);
                 notification.Send(SendEmailNotification.Create(
-                        userCreated.EmailAddress,
+                        userCreated.EmailAddress.value,
                         "subject",
                         "content"
                     )

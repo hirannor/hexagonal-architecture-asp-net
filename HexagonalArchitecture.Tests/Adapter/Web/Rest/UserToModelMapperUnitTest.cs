@@ -10,7 +10,7 @@ namespace DotnetWebApi.Tests.Adapter.Web.Rest;
 [DisplayName("UserToModelMapper")]
 public class UserToModelMapperUnitTest
 {
-    private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.UserToModelMapper();
+    private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.CreateUserToModelMapper();
 
     [Fact]
     [DisplayName("should map User domain object to User model")]

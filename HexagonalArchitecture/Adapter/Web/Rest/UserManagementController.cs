@@ -10,15 +10,30 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
     [Route("api/users")]
     [ApiController]
     public class UserManagementController(
+        IUserDetailsModification userDetailsModification,
         IUserCreation userCreation,
         IUserDisplay userDisplay,
         IUserDeletion userDeletion)
         : ControllerBase
     {
-        private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.UserToModelMapper();
+        private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.CreateUserToModelMapper();
 
         private readonly IFunction<CreateUserModel, CreateUser> _mapCreateUserModelToDomain =
             UserMapperFactory.CreateUserModelToDomainMapper();
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserModel>> ChangeUserDetails(string id, [FromBody] ChangeUserDetailsModel model)
+        {
+            var cmd = UserMapperFactory.CreateChangeUserDetailsModelToDomainMapper(id)
+                .Apply(model);
+
+            var domain = await userDetailsModification.ChangeBy(cmd);
+
+            return _mapUserToModel.Apply(domain);
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -44,37 +59,37 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
 
             return model;
         }
-        
-        [HttpDelete("{rawUserId}")]
+
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Task<UserModel>>> DeleteBy(string rawUserId)
+        public async Task<ActionResult<Task<UserModel>>> DeleteBy(string id)
         {
-            var id = UserId.From(rawUserId);
-            var domain = await userDisplay.DisplayBy(id);
+            var userId = UserId.From(id);
+            var domain = await userDisplay.DisplayBy(userId);
 
             if (domain is null)
             {
-                var details = CreateUserNotFoundProblemDetailsFor(id);
+                var details = CreateUserNotFoundProblemDetailsFor(userId);
                 return NotFound(details);
             }
 
-            await userDeletion.DeleteBy(id);
+            await userDeletion.DeleteBy(userId);
 
             return NoContent();
         }
 
-        [HttpGet("{rawUserId}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserModel>> DisplayBy(string rawUserId)
+        public async Task<ActionResult<UserModel>> DisplayBy(string id)
         {
-            var id = UserId.From(rawUserId);
-            var domain = await userDisplay.DisplayBy(id);
+            var userId = UserId.From(id);
+            var domain = await userDisplay.DisplayBy(userId);
 
             if (domain is null)
             {
-                var details = CreateUserNotFoundProblemDetailsFor(id);
+                var details = CreateUserNotFoundProblemDetailsFor(userId);
                 return NotFound(details);
             }
 

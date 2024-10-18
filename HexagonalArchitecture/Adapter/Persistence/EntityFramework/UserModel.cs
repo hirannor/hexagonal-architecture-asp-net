@@ -17,11 +17,11 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
 
         [Required]
         [Column("EMAIL_ADDRESS", TypeName = "varchar(200)")]
-        public string EmailAddress { get; init; } = emailAddress;
+        public string EmailAddress { get; set; } = emailAddress;
 
         [Column("FULL_NAME", TypeName = "varchar(200)")]
-        public string FullName { get; init; } = fullName;
+        public string FullName { get; set; } = fullName;
 
-        [Required] [Column("AGE")] public int Age { get; init; } = age;
+        [Required] [Column("AGE")] public int Age { get; set; } = age;
     }
 }

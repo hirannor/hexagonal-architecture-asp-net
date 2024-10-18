@@ -11,9 +11,27 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.UserToModelMapper();
         private readonly IFunction<UserModel, User> _mapUserModelToDomain = UserMapperFactory.UserModelToDomainMapper();
 
+        public async Task<User> ChangeUserDetails(User domain)
+        {
+            ArgumentNullException.ThrowIfNull(domain, "User cannot be null");
+
+            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == domain.UserId.Value);
+
+            if (model is null)
+            {
+            }
+
+            var modifiedModel = UserModeller.ApplyChangesFrom(domain).To(model);
+            context.Entry(modifiedModel).State = EntityState.Modified;
+
+            await context.SaveChangesAsync();
+
+            return domain;
+        }
+
         public async Task DeleteBy(UserId id)
         {
-            ArgumentNullException.ThrowIfNull(id);
+            ArgumentNullException.ThrowIfNull(id, "UserId cannot be null");
 
             var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
 
