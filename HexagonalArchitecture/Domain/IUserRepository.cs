@@ -4,7 +4,7 @@
     {
         Task<List<User>> ListAll();
 
-        Task Delete(UserId id);
+        Task DeleteBy(UserId id);
 
         Task<User> FindBy(EmailAddress emailAddress);
         

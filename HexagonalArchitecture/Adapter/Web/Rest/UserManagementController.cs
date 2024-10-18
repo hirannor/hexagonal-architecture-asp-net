@@ -30,7 +30,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
             var domain = await userCreation.CreateBy(cmd);
             var ret = _mapUserToModel.Apply(domain);
 
-            return CreatedAtAction(nameof(DisplayById), new { Id = ret.UserId }, ret);
+            return CreatedAtAction(nameof(DisplayBy), new { Id = ret.UserId }, ret);
         }
 
         [HttpGet]
@@ -45,36 +45,36 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
             return model;
         }
         
-        [HttpDelete("{id}")]
+        [HttpDelete("{rawUserId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Task<UserModel>>> Delete(string id)
+        public async Task<ActionResult<Task<UserModel>>> DeleteBy(string rawUserId)
         {
-            var userId = UserId.From(id);
-            var domain = await userDisplay.DisplayBy(userId);
+            var id = UserId.From(rawUserId);
+            var domain = await userDisplay.DisplayBy(id);
 
             if (domain is null)
             {
-                var details = CreateUserNotFoundProblemDetailsFor(userId);
+                var details = CreateUserNotFoundProblemDetailsFor(id);
                 return NotFound(details);
             }
 
-            await userDeletion.DeleteBy(userId);
+            await userDeletion.DeleteBy(id);
 
             return NoContent();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{rawUserId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserModel>> DisplayById(string id)
+        public async Task<ActionResult<UserModel>> DisplayBy(string rawUserId)
         {
-            var userId = UserId.From(id);
-            var domain = await userDisplay.DisplayBy(userId);
+            var id = UserId.From(rawUserId);
+            var domain = await userDisplay.DisplayBy(id);
 
             if (domain is null)
             {
-                var details = CreateUserNotFoundProblemDetailsFor(userId);
+                var details = CreateUserNotFoundProblemDetailsFor(id);
                 return NotFound(details);
             }
 

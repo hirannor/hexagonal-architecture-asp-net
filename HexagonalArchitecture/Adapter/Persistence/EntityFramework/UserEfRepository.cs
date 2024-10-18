@@ -11,7 +11,7 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.UserToModelMapper();
         private readonly IFunction<UserModel, User> _mapUserModelToDomain = UserMapperFactory.UserModelToDomainMapper();
 
-        public async Task Delete(UserId id)
+        public async Task DeleteBy(UserId id)
         {
             ArgumentNullException.ThrowIfNull(id);
 

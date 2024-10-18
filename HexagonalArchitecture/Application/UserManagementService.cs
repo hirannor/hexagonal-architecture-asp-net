@@ -55,7 +55,7 @@ namespace HexagonalArchitecture.Application
 
             logger.LogInformation("Attempting to delete user with id: {id}", id);
 
-            await users.Delete(id);
+            await users.DeleteBy(id);
 
             logger.LogInformation("User with id: {id} was deleted successfully", id);
         }
