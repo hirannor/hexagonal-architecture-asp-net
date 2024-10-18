@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using FluentAssertions;
-using HexagonalArchitecture.Adapter.Web.Rest;
 using HexagonalArchitecture.Adapter.Web.Rest.Mapping;
+using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Infrastructure;
 
@@ -10,7 +10,7 @@ namespace DotnetWebApi.Tests.Adapter.Web.Rest;
 [DisplayName("UserToModelMapper")]
 public class UserToModelMapperUnitTest
 {
-    private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.CreateUserToModelMapper();
+    private readonly IFunction<User, UserModel> _mapUserToModel = UserMappingFactory.CreateUserToModelMapper();
 
     [Fact]
     [DisplayName("should map User domain object to User model")]

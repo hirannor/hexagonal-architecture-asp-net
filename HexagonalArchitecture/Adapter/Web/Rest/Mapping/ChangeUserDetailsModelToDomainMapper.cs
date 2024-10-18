@@ -1,4 +1,5 @@
-﻿using HexagonalArchitecture.Domain;
+﻿using HexagonalArchitecture.Adapter.Web.Rest.Model;
+using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 

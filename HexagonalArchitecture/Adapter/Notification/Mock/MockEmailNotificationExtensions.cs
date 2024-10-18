@@ -4,7 +4,7 @@ namespace HexagonalArchitecture.Adapter.Notification.Mock;
 
 public static class MockEmailNotificationExtensions
 {
-    public static IServiceCollection AddMockEmailNotificationExtensions(this IServiceCollection services)
+    public static IServiceCollection AddMockEmailNotificationAdapter(this IServiceCollection services)
     {
         services.AddSingleton<IEmailNotification, MockEmailNotification>();
 

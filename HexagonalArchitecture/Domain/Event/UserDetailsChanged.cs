@@ -1,6 +1,6 @@
 ﻿using HexagonalArchitecture.Infrastructure.Eventing;
 
-namespace HexagonalArchitecture.Domain.Command;
+namespace HexagonalArchitecture.Domain.Event;
 
 public class UserDetailsChanged : DomainEvent
 {

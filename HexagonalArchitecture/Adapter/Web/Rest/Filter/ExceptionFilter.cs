@@ -18,7 +18,7 @@ public class ExceptionFilter : IExceptionFilter
 
         switch (context.Exception)
         {
-            case CustomerWithEmailAddressAlreadyExist emailAddressAlreadyExist:
+            case UserWithEmailAddressAlreadyExist emailAddressAlreadyExist:
                 problemDetails.Status = StatusCodes.Status409Conflict;
                 problemDetails.Title = emailAddressAlreadyExist.Message;
                 break;

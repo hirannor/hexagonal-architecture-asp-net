@@ -1,17 +1,16 @@
-﻿namespace HexagonalArchitecture.Domain
+﻿namespace HexagonalArchitecture.Domain;
+
+public interface IUserRepository : IDisposable
 {
-    public interface IUserRepository : IDisposable
-    {
-        Task<User> ChangeUserDetails(User domain);
+    Task<User> ChangeUserDetails(User domain);
 
-        Task<List<User>> ListAll();
+    Task<List<User>> ListAll();
 
-        Task DeleteBy(UserId id);
+    Task DeleteBy(UserId id);
 
-        Task<User> FindBy(EmailAddress emailAddress);
+    Task<User> FindBy(EmailAddress emailAddress);
 
-        Task<User> FindBy(UserId id);
+    Task<User> FindBy(UserId id);
 
-        Task Insert(User domain);
-    }
+    Task Insert(User domain);
 }

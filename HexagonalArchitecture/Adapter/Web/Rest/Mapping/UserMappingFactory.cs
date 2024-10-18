@@ -1,10 +1,11 @@
-﻿using HexagonalArchitecture.Domain;
+﻿using HexagonalArchitecture.Adapter.Web.Rest.Model;
+using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 
 namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping;
 
-public static class UserMapperFactory
+public static class UserMappingFactory
 {
     public static IFunction<ChangeUserDetailsModel, ChangeUserDetails> CreateChangeUserDetailsModelToDomainMapper(
         string userId)

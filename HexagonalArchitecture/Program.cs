@@ -19,12 +19,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<UserContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddApplicationServices();
-builder.Services.AddEventBusExtensions();
-builder.Services.AddPersistenceEfExtensions();
-builder.Services.AddMockEmailNotificationExtensions();
-builder.Services.AddInfrastructureExtensions();
-builder.Services.AddMigrationExtensions();
+builder.Services.AddEventBusAdapter();
+builder.Services.AddEntityFrameworkPersistenceAdapter();
+builder.Services.AddMockEmailNotificationAdapter();
+builder.Services.AddInfrastructureElements();
+builder.Services.AddDatabaseMigrator();
 
 var app = builder.Build();
 

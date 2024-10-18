@@ -3,110 +3,107 @@ using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 
-namespace HexagonalArchitecture.Application
+namespace HexagonalArchitecture.Application;
+
+public class UserManagementService(
+    IUserRepository users,
+    ILogger<UserManagementService> logger,
+    IEventPublishing eventPublishing) :
+    IUserDetailsModification,
+    IUserCreation,
+    IUserDisplay,
+    IUserDeletion
 {
-    public class UserManagementService(
-        IUserRepository users,
-        ILogger<UserManagementService> logger,
-        IEventPublishing eventPublishing) :
-        IUserDetailsModification,
-        IUserCreation,
-        IUserDisplay,
-        IUserDeletion
+    private const string CreateUserCommandIsNull = "CreateUser command cannot be null!";
+    private const string ChangeUserDetailsCommandIsNull = "ChangeUserDetails command cannot be null!";
+    private const string UserIdentifierCannotBeNull = "User identifier cannot be null!";
+
+    public async Task<User> ChangeBy(ChangeUserDetails cmd)
     {
-        private const string CreateUserCommandIsNull = "CreateUser command cannot be null!";
-        private const string ChangeUserDetailsCommandIsNull = "ChangeUserDetails command cannot be null!";
-        private const string UserIdentifierCannotBeNull = "User identifier cannot be null!";
-
-        public async Task<User> ChangeBy(ChangeUserDetails cmd)
+        if (cmd == null)
         {
-            if (cmd == null)
-            {
-                logger.LogError(ChangeUserDetailsCommandIsNull);
-                ArgumentNullException.ThrowIfNull(ChangeUserDetailsCommandIsNull);
-            }
-
-            var foundEmailAddress = await users.FindBy(cmd.EmailAddress);
-
-            if (foundEmailAddress is not null)
-            {
-                logger.LogError("Email address: {email} already in use", cmd.EmailAddress);
-                throw new CustomerWithEmailAddressAlreadyExist(
-                    $"Email address: {cmd.EmailAddress} already in use", cmd.EmailAddress);
-            }
-
-            var domain = await users.FindBy(cmd.UserId);
-
-            var changedDetailsToPersist = domain.ChangeBy(cmd);
-            await users.ChangeUserDetails(changedDetailsToPersist);
-
-            eventPublishing.Publish(domain.ListEvents());
-            domain.ClearEvents();
-
-            return domain;
+            logger.LogError(ChangeUserDetailsCommandIsNull);
+            ArgumentNullException.ThrowIfNull(ChangeUserDetailsCommandIsNull);
         }
 
-        public async Task<User> CreateBy(CreateUser cmd)
+        var domain = await users.FindBy(cmd.UserId);
+
+        if (domain.EmailAddress.value == cmd.EmailAddress.value)
         {
-            if (cmd == null)
-            {
-                logger.LogError(CreateUserCommandIsNull);
-                ArgumentNullException.ThrowIfNull(CreateUserCommandIsNull);
-            }
-
-            var foundUser = await users.FindBy(cmd.EmailAddress);
-
-            if (foundUser is not null)
-            {
-                logger.LogError("Email address: {email} already in use", cmd.EmailAddress);
-                throw new CustomerWithEmailAddressAlreadyExist(
-                    $"Email address: {cmd.EmailAddress} already in use", cmd.EmailAddress);
-            }
-
-            var domain = User.Create(cmd);
-
-            logger.LogInformation("Attempting to insert user with {id}", domain.UserId);
-            await users.Insert(domain);
-            logger.LogInformation("User with {id} was created successfully", domain.UserId);
-
-            eventPublishing.Publish(domain.ListEvents());
-            domain.ClearEvents();
-
-            return domain;
+            logger.LogError("Email address: {email} already in use", cmd.EmailAddress.value);
+            throw new UserWithEmailAddressAlreadyExist(
+                $"Email address: {cmd.EmailAddress.value} already in use", cmd.EmailAddress.value);
         }
 
-        public async Task DeleteBy(UserId id)
+        var changedDetailsToPersist = domain.ChangeBy(cmd);
+        await users.ChangeUserDetails(changedDetailsToPersist);
+
+        eventPublishing.Publish(domain.ListEvents());
+        domain.ClearEvents();
+
+        return domain;
+    }
+
+    public async Task<User> CreateBy(CreateUser cmd)
+    {
+        if (cmd == null)
         {
-            if (id == null)
-            {
-                logger.LogError(UserIdentifierCannotBeNull);
-                ArgumentNullException.ThrowIfNull(UserIdentifierCannotBeNull);
-            }
-
-            logger.LogInformation("Attempting to delete user with id: {id}", id);
-
-            await users.DeleteBy(id);
-
-            logger.LogInformation("User with id: {id} was deleted successfully", id);
+            logger.LogError(CreateUserCommandIsNull);
+            ArgumentNullException.ThrowIfNull(CreateUserCommandIsNull);
         }
 
-        public async Task<List<User>> DisplayAll()
+        var foundUser = await users.FindBy(cmd.EmailAddress);
+
+        if (foundUser is not null)
         {
-            logger.LogInformation("Retrieving all users");
-            return await users.ListAll();
+            logger.LogError("Email address: {email} already in use", cmd.EmailAddress.value);
+            throw new UserWithEmailAddressAlreadyExist(
+                $"Email address: {cmd.EmailAddress} already in use", cmd.EmailAddress.value);
         }
 
-        public async Task<User> DisplayBy(UserId id)
+        var domain = User.Create(cmd);
+
+        logger.LogInformation("Attempting to insert user with {id}", domain.UserId.Value);
+        await users.Insert(domain);
+        logger.LogInformation("User with {id} was created successfully", domain.UserId.Value);
+
+        eventPublishing.Publish(domain.ListEvents());
+        domain.ClearEvents();
+
+        return domain;
+    }
+
+    public async Task DeleteBy(UserId id)
+    {
+        if (id == null)
         {
-            if (id == null)
-            {
-                logger.LogError(UserIdentifierCannotBeNull);
-                ArgumentNullException.ThrowIfNull(UserIdentifierCannotBeNull);
-            }
-
-            logger.LogInformation("Retrieving user with {id}", id);
-
-            return await users.FindBy(id);
+            logger.LogError(UserIdentifierCannotBeNull);
+            ArgumentNullException.ThrowIfNull(UserIdentifierCannotBeNull);
         }
+
+        logger.LogInformation("Attempting to delete user with id: {id}", id);
+
+        await users.DeleteBy(id);
+
+        logger.LogInformation("User with id: {id} was deleted successfully", id);
+    }
+
+    public async Task<List<User>> DisplayAll()
+    {
+        logger.LogInformation("Retrieving all users");
+        return await users.ListAll();
+    }
+
+    public async Task<User> DisplayBy(UserId id)
+    {
+        if (id == null)
+        {
+            logger.LogError(UserIdentifierCannotBeNull);
+            ArgumentNullException.ThrowIfNull(UserIdentifierCannotBeNull);
+        }
+
+        logger.LogInformation("Retrieving user with {id}", id);
+
+        return await users.FindBy(id);
     }
 }

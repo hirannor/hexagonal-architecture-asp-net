@@ -1,4 +1,5 @@
-﻿using HexagonalArchitecture.Domain;
+﻿using HexagonalArchitecture.Adapter.Web.Rest.Model;
+using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Infrastructure;
 
 namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping;

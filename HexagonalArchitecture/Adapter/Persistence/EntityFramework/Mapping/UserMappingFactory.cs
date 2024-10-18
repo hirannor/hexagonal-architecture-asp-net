@@ -3,7 +3,7 @@ using HexagonalArchitecture.Infrastructure;
 
 namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework.Mapping;
 
-public static class UserMapperFactory
+public static class UserMappingFactory
 {
     public static IFunction<User, UserModel> UserToModelMapper()
     {
