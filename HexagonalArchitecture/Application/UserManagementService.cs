@@ -1,4 +1,5 @@
-﻿using HexagonalArchitecture.Application.UseCase;
+﻿using HexagonalArchitecture.Application.Error;
+using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 
@@ -21,6 +22,15 @@ namespace HexagonalArchitecture.Application
             {
                 logger.LogError(CreateUserCommandIsNull);
                 ArgumentNullException.ThrowIfNull(CreateUserCommandIsNull);
+            }
+
+            var foundUser = await users.FindBy(EmailAddress.From(cmd.EmailAddress));
+
+            if (foundUser is not null)
+            {
+                logger.LogError("Email address: {email} already in use", cmd.EmailAddress);
+                throw new CustomerWithEmailAddressAlreadyExist(
+                    $"Email address: {cmd.EmailAddress} already in use", cmd.EmailAddress);
             }
 
             var domain = User.Create(cmd);

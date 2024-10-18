@@ -11,12 +11,36 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         private readonly IFunction<User, UserModel> _mapUserToModel = UserMapperFactory.UserToModelMapper();
         private readonly IFunction<UserModel, User> _mapUserModelToDomain = UserMapperFactory.UserModelToDomainMapper();
 
-        public async Task Insert(User domain)
+        public async Task Delete(UserId id)
         {
-            var model = _mapUserToModel.Apply(domain);
-            await context.Users.AddAsync(model);
+            ArgumentNullException.ThrowIfNull(id);
+
+            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
+
+            if (model != null)
+            {
+                context.Users.Remove(model);
+            }
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task<User> FindBy(UserId id)
+        {
+            ArgumentNullException.ThrowIfNull(id, "UserId cannot be null");
+
+            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
+
+            return _mapUserModelToDomain.Apply(model);
+        }
+
+        public async Task<User> FindBy(EmailAddress emailAddress)
+        {
+            ArgumentNullException.ThrowIfNull(emailAddress, "Email address cannot be null!");
+
+            var model = await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.value);
+
+            return _mapUserModelToDomain.Apply(model);
         }
 
         public async Task<List<User>> ListAll()
@@ -29,25 +53,12 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
             return domain;
         }
 
-        public async Task<User> FindBy(UserId id)
+        public async Task Insert(User domain)
         {
-            ArgumentNullException.ThrowIfNull(id);
+            ArgumentNullException.ThrowIfNull(domain, "User cannot be null");
 
-            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
-
-            return _mapUserModelToDomain.Apply(model);
-        }
-
-        public async Task Delete(UserId id)
-        {
-            ArgumentNullException.ThrowIfNull(id);
-
-            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
-
-            if (model != null)
-            {
-                context.Users.Remove(model);
-            }
+            var model = _mapUserToModel.Apply(domain);
+            await context.Users.AddAsync(model);
 
             await context.SaveChangesAsync();
         }

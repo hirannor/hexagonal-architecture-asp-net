@@ -1,6 +1,7 @@
 using HexagonalArchitecture.Adapter.Messaging.EventBus;
 using HexagonalArchitecture.Adapter.Notification.Mock;
 using HexagonalArchitecture.Adapter.Persistence.EntityFramework;
+using HexagonalArchitecture.Adapter.Web.Rest.Filter;
 using HexagonalArchitecture.Application.Extensions;
 using HexagonalArchitecture.Infrastructure;
 using HexagonalArchitecture.Infrastructure.Database;
@@ -12,7 +13,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
