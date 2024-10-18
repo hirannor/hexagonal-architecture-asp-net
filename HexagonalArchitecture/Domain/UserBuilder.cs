@@ -3,9 +3,9 @@
     public class UserBuilder
     {
         private UserId _id;
-        private string _emailAddress;
+        private EmailAddress _emailAddress;
         private string _fullName;
-        private int _age;
+        private Age _age;
 
         public static UserBuilder Empty()
         {
@@ -18,7 +18,7 @@
             return this;
         }
 
-        public UserBuilder EmailAddress(string emailAddress)
+        public UserBuilder EmailAddress(EmailAddress emailAddress)
         {
             _emailAddress = emailAddress;
             return this;
@@ -30,7 +30,7 @@
             return this;
         }
 
-        public UserBuilder Age(int age)
+        public UserBuilder Age(Age age)
         {
             _age = age;
             return this;

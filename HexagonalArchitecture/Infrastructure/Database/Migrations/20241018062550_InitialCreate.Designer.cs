@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20241017143335_InitialCreate")]
+    [Migration("20241018062550_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -26,10 +26,12 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("HexagonalArchitecture.Adapter.Persistence.EntityFramework.UserModel", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int")

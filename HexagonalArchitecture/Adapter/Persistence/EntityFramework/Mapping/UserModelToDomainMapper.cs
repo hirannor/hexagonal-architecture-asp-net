@@ -9,6 +9,7 @@ internal class UserModelToDomainMapper : IFunction<UserModel, User>
     {
         if (input is null) return null;
 
-        return User.From(UserId.From(input.UserId), input.EmailAddress, input.FullName, input.Age);
+        return User.From(UserId.From(input.UserId), EmailAddress.From(input.EmailAddress), input.FullName,
+            Age.From(input.Age));
     }
 }

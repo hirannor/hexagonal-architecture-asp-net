@@ -11,16 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
-    {
-        sqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", "dbo");
-    }));
-
+builder.Services.AddDbContext<UserContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddApplicationServices();
 builder.Services.AddEventBusExtensions();
 builder.Services.AddPersistenceEfExtensions();

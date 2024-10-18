@@ -23,10 +23,12 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("HexagonalArchitecture.Adapter.Persistence.EntityFramework.UserModel", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int")

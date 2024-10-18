@@ -6,19 +6,19 @@ using HexagonalArchitecture.Infrastructure.Eventing;
 
 namespace HexagonalArchitecture.Domain
 {
-    public class User(UserId id, string emailAddress, string fullName, int age) : IAggregateRoot
+    public class User(UserId userId, EmailAddress emailAddress, string fullName, Age age) : IAggregateRoot
     {
-        [field: Required] public UserId Id { get; init; } = id;
+        [field: Required] public UserId userId { get; } = userId;
 
-        [field: Required] public string EmailAddress { get; } = emailAddress;
+        [field: Required] public EmailAddress EmailAddress { get; } = emailAddress;
 
-        [field: Required] public string FullName { get; init; } = fullName;
+        [field: Required] public string FullName { get; } = fullName;
 
-        [field: Required] public int Age { get; init; } = age;
+        [field: Required] public Age Age { get; } = age;
 
         private readonly List<DomainEvent> _domainEvents = [];
 
-        public static User From(UserId id, string emailAddress, string fullName, int age)
+        public static User From(UserId id, EmailAddress emailAddress, string fullName, Age age)
         {
             return UserBuilder
                 .Empty()
@@ -41,9 +41,9 @@ namespace HexagonalArchitecture.Domain
             var newUser = UserBuilder
                 .Empty()
                 .UserId(id)
-                .EmailAddress(cmd.EmailAddress)
+                .EmailAddress(EmailAddress.From(cmd.EmailAddress))
                 .FullName(cmd.FullName)
-                .Age(cmd.Age)
+                .Age(Age.From(cmd.Age))
                 .CreateUser();
 
             newUser._domainEvents.Add(UserCreated.Issue(id, cmd.EmailAddress));

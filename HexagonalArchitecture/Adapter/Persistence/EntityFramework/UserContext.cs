@@ -17,8 +17,6 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
             modelBuilder.Entity<UserModel>()
                 .HasIndex(u => u.UserId)
                 .IsUnique();
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserContext).Assembly);
         }
     }
 }

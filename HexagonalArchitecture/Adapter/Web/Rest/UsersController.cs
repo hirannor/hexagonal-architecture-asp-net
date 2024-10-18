@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HexagonalArchitecture.Adapter.Web.Rest
 {
-    [Route("api/users")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class UserController(
+    public class UsersController(
         IUserCreation userCreation,
         IUserDisplay userDisplay,
         IUserDeletion userDeletion)
@@ -29,7 +29,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
             var domain = await userCreation.Create(cmd);
             var ret = _mapUserToModel.Apply(domain);
 
-            return CreatedAtAction(nameof(DisplayById), new { ret.Id }, ret);
+            return CreatedAtAction(nameof(DisplayById), new { Id = ret.UserId }, ret);
         }
 
         [HttpGet]

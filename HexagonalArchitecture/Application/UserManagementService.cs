@@ -25,9 +25,9 @@ namespace HexagonalArchitecture.Application
 
             var domain = User.Create(cmd);
 
-            logger.LogInformation("Attempting to insert user with {id}", domain.Id);
+            logger.LogInformation("Attempting to insert user with {id}", domain.userId);
             await users.Insert(domain);
-            logger.LogInformation("User with {id} was created successfully", domain.Id);
+            logger.LogInformation("User with {id} was created successfully", domain.userId);
 
             eventPublishing.Publish(domain.ListEvents());
             domain.ClearEvents();

@@ -9,7 +9,7 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("ID")]
-        public string Id { get; private set; }
+        public int Id { get; init; }
 
         [Required]
         [Column("USER_ID", TypeName = "varchar(200)")]
@@ -22,9 +22,6 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         [Column("FULL_NAME", TypeName = "varchar(200)")]
         public string FullName { get; init; } = fullName;
 
-        [Required]
-        [Column("AGE")]
-        [Range(18, 100, ErrorMessage = "Age must be between 18 and 100")]
-        public int Age { get; init; } = age;
+        [Required] [Column("AGE")] public int Age { get; init; } = age;
     }
 }

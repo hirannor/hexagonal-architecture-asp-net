@@ -9,6 +9,6 @@ public class UserToModelMapper : IFunction<User, UserModel>
     {
         if (input is null) return null;
 
-        return new UserModel(input.Id.Value, input.EmailAddress, input.FullName, input.Age);
+        return new UserModel(input.userId.Value, input.EmailAddress.value, input.FullName, input.Age.value);
     }
 }

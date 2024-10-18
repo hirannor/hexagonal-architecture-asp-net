@@ -33,7 +33,7 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var model = await context.Users.FirstOrDefaultAsync(model => model.Id == id.Value);
+            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
 
             return _mapUserModelToDomain.Apply(model);
         }
@@ -42,7 +42,7 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var model = await context.Users.FirstOrDefaultAsync(model => model.Id == id.Value);
+            var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
 
             if (model != null)
             {

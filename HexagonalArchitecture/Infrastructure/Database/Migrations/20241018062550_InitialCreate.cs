@@ -14,7 +14,8 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
                 name: "USERS",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     USER_ID = table.Column<string>(type: "varchar(200)", nullable: false),
                     EMAIL_ADDRESS = table.Column<string>(type: "varchar(200)", nullable: false),
                     FULL_NAME = table.Column<string>(type: "varchar(200)", nullable: false),
@@ -54,6 +55,8 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
                     { "9", "user9@example.com", "User Nine", 26, Guid.NewGuid().ToString() },
                     { "10", "user10@example.com", "User Ten", 31, Guid.NewGuid().ToString() }
                 });
+            
+            migrationBuilder.Sql("DBCC CHECKIDENT('USERS', RESEED, 11)");
         }
 
         /// <inheritdoc />

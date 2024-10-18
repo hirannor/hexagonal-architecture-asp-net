@@ -21,7 +21,7 @@ public class UserToModelMapperUnitTest
         const string emailAddress = "john.doe@example.com";
         const int age = 32;
 
-        var domain = User.From(id, emailAddress, fullName, age);
+        var domain = User.From(id, EmailAddress.From(emailAddress), fullName, Age.From(age));
         var expectedModel = UserModel.From(id.Value, emailAddress, fullName, age);
 
         var result = _mapUserToModel.Apply(domain);
