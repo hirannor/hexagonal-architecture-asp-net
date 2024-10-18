@@ -6,6 +6,6 @@ namespace HexagonalArchitecture.Application.UseCase
     {
         Task<List<User>> DisplayAll();
 
-        Task<User> DisplayById(UserId id);
+        Task<User> DisplayBy(UserId id);
     }
 }

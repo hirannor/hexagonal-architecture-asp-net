@@ -41,7 +41,7 @@ public class UserManagementServiceComponentTest
             .Returns(Task.CompletedTask);
 
         _publishing.Setup(events => events.Publish(It.IsAny<IEnumerable<Message>>()));
-        var result = await _userManagementService.Create(cmd);
+        var result = await _userManagementService.CreateBy(cmd);
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expected, options => options.Excluding(user => user.userId));

@@ -5,6 +5,6 @@ namespace HexagonalArchitecture.Application.UseCase
 {
     public interface IUserCreation
     {
-        Task<User> Create(CreateUser cmd);
+        Task<User> CreateBy(CreateUser cmd);
     }
 }

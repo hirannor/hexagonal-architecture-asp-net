@@ -29,7 +29,7 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
             return domain;
         }
 
-        public async Task<User> FindById(UserId id)
+        public async Task<User> FindBy(UserId id)
         {
             ArgumentNullException.ThrowIfNull(id);
 
@@ -38,7 +38,7 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework
             return _mapUserModelToDomain.Apply(model);
         }
 
-        public async Task DeleteBy(UserId id)
+        public async Task Delete(UserId id)
         {
             ArgumentNullException.ThrowIfNull(id);
 

@@ -26,7 +26,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
         public async Task<ActionResult<UserModel>> Create([FromBody] CreateUserModel model)
         {
             var cmd = _mapCreateUserModelToDomain.Apply(model);
-            var domain = await userCreation.Create(cmd);
+            var domain = await userCreation.CreateBy(cmd);
             var ret = _mapUserToModel.Apply(domain);
 
             return CreatedAtAction(nameof(DisplayById), new { Id = ret.UserId }, ret);
@@ -50,7 +50,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
         public async Task<ActionResult<UserModel>> DisplayById(string id)
         {
             var userId = UserId.From(id);
-            var domain = await userDisplay.DisplayById(userId);
+            var domain = await userDisplay.DisplayBy(userId);
 
             if (domain is null)
             {
@@ -69,7 +69,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest
         public async Task<ActionResult<Task<UserModel>>> Delete(string id)
         {
             var userId = UserId.From(id);
-            var domain = await userDisplay.DisplayById(userId);
+            var domain = await userDisplay.DisplayBy(userId);
 
             if (domain is null)
             {

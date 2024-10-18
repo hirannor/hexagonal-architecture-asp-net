@@ -6,8 +6,8 @@
 
         Task<List<User>> ListAll();
 
-        Task<User> FindById(UserId id);
+        Task<User> FindBy(UserId id);
 
-        Task DeleteBy(UserId id);
+        Task Delete(UserId id);
     }
 }

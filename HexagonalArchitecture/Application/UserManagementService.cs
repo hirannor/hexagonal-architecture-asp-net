@@ -15,7 +15,7 @@ namespace HexagonalArchitecture.Application
         private const string CreateUserCommandIsNull = "CreateUser command cannot be null!";
         private const string UserIdentifierCannotBeNull = "User identifier cannot be null!";
 
-        public async Task<User> Create(CreateUser cmd)
+        public async Task<User> CreateBy(CreateUser cmd)
         {
             if (cmd == null)
             {
@@ -45,7 +45,7 @@ namespace HexagonalArchitecture.Application
 
             logger.LogInformation("Attempting to delete user with id: {id}", id);
 
-            await users.DeleteBy(id);
+            await users.Delete(id);
 
             logger.LogInformation("User with id: {id} was deleted successfully", id);
         }
@@ -56,7 +56,7 @@ namespace HexagonalArchitecture.Application
             return await users.ListAll();
         }
 
-        public async Task<User> DisplayById(UserId id)
+        public async Task<User> DisplayBy(UserId id)
         {
             if (id == null)
             {
@@ -66,7 +66,7 @@ namespace HexagonalArchitecture.Application
 
             logger.LogInformation("Retrieving user with {id}", id);
 
-            return await users.FindById(id);
+            return await users.FindBy(id);
         }
     }
 }
