@@ -18,11 +18,15 @@ In the appsettings.json or appsettings.Development.json file, you can configure 
   "Adapter": {
     "Persistence": "EntityFramework",
     "Messaging": "EventBus",
-    "Notification": "Mock"
+    "Notification": "Email"
   }
 }
 ```
 
-Currently, only the Persistence adapter has two different implementations, which are as follows:
-- EntityFramework
-- InMemory (not fully implemented; only the base classes have been created for demonstration purposes)
+Currently, only the Persistence and Notification adapter has two different implementations, which are as follows:
+- Persistence:
+  - EntityFramework
+  - InMemory (not fully implemented; only the base classes have been created for demonstration purposes)
+- Notification:
+  - Email
+  - Mock
