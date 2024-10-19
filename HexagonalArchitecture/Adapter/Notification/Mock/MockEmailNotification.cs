@@ -7,7 +7,7 @@ public class MockEmailNotification(ILogger<MockEmailNotification> logger)
 {
     private const string SendEmailNotificationCmdIsNull = "SendEmailNotification command should be not null!";
 
-    public void Send(SendEmailNotification cmd)
+    public Task Send(SendEmailNotification cmd)
     {
         if (cmd == null)
         {
@@ -16,5 +16,7 @@ public class MockEmailNotification(ILogger<MockEmailNotification> logger)
         }
 
         logger.LogDebug("Mock email notification adapter triggered...");
+        
+        return Task.CompletedTask;
     }
 }

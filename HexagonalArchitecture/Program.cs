@@ -1,4 +1,5 @@
 using HexagonalArchitecture.Adapter.Messaging.EventBus;
+using HexagonalArchitecture.Adapter.Notification.Email;
 using HexagonalArchitecture.Adapter.Notification.Mock;
 using HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 using HexagonalArchitecture.Adapter.Persistence.InMemory;
@@ -23,17 +24,21 @@ builder.Services.Configure<AdapterSettings>(builder.Configuration.GetSection("Ad
 builder.Services.AddDbContext<UserContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// add application services
 builder.Services.AddApplicationServices();
+
+// add adapters
 builder.Services.AddEventBusAdapter(builder.Configuration);
 builder.Services.AddEntityFrameworkPersistenceAdapter(builder.Configuration);
 builder.Services.AddInMemoryPersistenceAdapter(builder.Configuration);
 builder.Services.AddMockEmailNotificationAdapter(builder.Configuration);
+builder.Services.AddEmailNotificationAdapter(builder.Configuration);
+
 builder.Services.AddInfrastructureElements();
 builder.Services.AddDatabaseMigrator();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -2,5 +2,5 @@
 
 public interface IEmailNotification
 {
-    void Send(SendEmailNotification cmd);
+    Task Send(SendEmailNotification cmd);
 }

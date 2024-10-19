@@ -16,7 +16,7 @@ public class NotificationService(ILogger<NotificationService> logger, IEmailNoti
             ArgumentNullException.ThrowIfNull(SendEmailNotificationCmdIsNull);
         }
 
-        logger.LogInformation("Sending out email notification for {emailAddress}...", cmd.emailAddress);
+        logger.LogInformation("Sending out email notification for {emailAddress}...", cmd.EmailAddress);
         notification.Send(cmd);
         logger.LogInformation("Email notification send was successful...");
     }

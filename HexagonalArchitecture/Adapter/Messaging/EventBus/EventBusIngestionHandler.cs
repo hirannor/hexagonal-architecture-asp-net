@@ -18,8 +18,17 @@ public class EventBusIngestionHandler(ILogger<EventBusIngestionHandler> logger, 
                 logger.LogDebug("Handling UserCreated event: {evt}", userCreated);
                 notification.Send(SendEmailNotification.Create(
                         userCreated.EmailAddress.value,
-                        "subject",
-                        "content"
+                        "UserCreated",
+                        "User has been created successfully."
+                    )
+                );
+                break;
+            case UserDetailsChanged userDetailsChanged:
+                logger.LogDebug("Handling UserDetailsChanged event: {evt}", userDetailsChanged);
+                notification.Send(SendEmailNotification.Create(
+                        userDetailsChanged.EmailAddress.value,
+                        "UserDetailsChanged",
+                        "User details has been modified successfully."
                     )
                 );
                 break;
