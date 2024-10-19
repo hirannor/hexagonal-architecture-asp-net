@@ -8,14 +8,17 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 internal sealed class UserEfRepository(UserContext context) : IUserRepository
 {
     private bool _disposedValue;
-    private readonly IFunction<User, UserModel> _mapUserToModel = UserMappingFactory.UserToModelMapper();
+    
+    private const string UserIdentifierCannotBeNull = "User identifier cannot be null!";
+    private const string UserCannotBeNull = "User cannot be null!";
 
+    private readonly IFunction<User, UserModel> _mapUserToModel = UserMappingFactory.UserToModelMapper();
     private readonly IFunction<UserModel, User>
         _mapUserModelToDomain = UserMappingFactory.UserModelToDomainMapper();
 
     public async Task<User> ChangeUserDetails(User domain)
     {
-        ArgumentNullException.ThrowIfNull(domain, "User cannot be null");
+        ArgumentNullException.ThrowIfNull(domain, UserCannotBeNull);
 
         var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == domain.UserId.Value);
 
@@ -24,8 +27,7 @@ internal sealed class UserEfRepository(UserContext context) : IUserRepository
             throw new KeyNotFoundException($"User with ID {domain.UserId.Value} not found.");
         }
 
-        var modifiedModel = UserModeller.ApplyChangesFrom(domain).To(model);
-        context.Entry(modifiedModel).State = EntityState.Modified;
+        UserModeller.ApplyChangesFrom(domain).To(model);
 
         await context.SaveChangesAsync();
 
@@ -34,7 +36,7 @@ internal sealed class UserEfRepository(UserContext context) : IUserRepository
 
     public async Task DeleteBy(UserId id)
     {
-        ArgumentNullException.ThrowIfNull(id, "UserId cannot be null");
+        ArgumentNullException.ThrowIfNull(id, UserIdentifierCannotBeNull);
 
         var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
 
@@ -48,7 +50,7 @@ internal sealed class UserEfRepository(UserContext context) : IUserRepository
 
     public async Task<User> FindBy(UserId id)
     {
-        ArgumentNullException.ThrowIfNull(id, "UserId cannot be null");
+        ArgumentNullException.ThrowIfNull(id, UserIdentifierCannotBeNull);
 
         var model = await context.Users.FirstOrDefaultAsync(model => model.UserId == id.Value);
 
@@ -76,7 +78,7 @@ internal sealed class UserEfRepository(UserContext context) : IUserRepository
 
     public async Task Insert(User domain)
     {
-        ArgumentNullException.ThrowIfNull(domain, "User cannot be null");
+        ArgumentNullException.ThrowIfNull(domain, UserCannotBeNull);
 
         var model = _mapUserToModel.Apply(domain);
         await context.Users.AddAsync(model);
