@@ -14,4 +14,8 @@ public record CreateUserModel(
     [Range(18, 99, ErrorMessage = "Age must be between 18 and 99 years.")]
     int Age)
 {
+    public static CreateUserModel From(string emailAddress, string fullName, int age)
+    {
+        return new CreateUserModel(emailAddress, fullName, age);
+    }
 }
