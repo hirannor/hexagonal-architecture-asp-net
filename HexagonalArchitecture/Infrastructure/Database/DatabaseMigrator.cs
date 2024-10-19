@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HexagonalArchitecture.Infrastructure.Database;
 
-public class DatabaseMigrator(UserContext userDbContext) : IDatabaseMigrator
+public class DatabaseMigrator(HexagonDbContext hexagonDbDbContext) : IDatabaseMigrator
 {
     public async Task MigrateAsync(CancellationToken cancellationToken)
     {
-        await userDbContext.Database.MigrateAsync(cancellationToken);
+        await hexagonDbDbContext.Database.MigrateAsync(cancellationToken);
     }
 }

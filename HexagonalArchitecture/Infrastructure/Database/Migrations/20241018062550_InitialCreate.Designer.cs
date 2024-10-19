@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(HexagonDbContext))]
     [Migration("20241018062550_InitialCreate")]
     partial class InitialCreate
     {

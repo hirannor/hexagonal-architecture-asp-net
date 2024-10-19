@@ -21,7 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<AdapterSettings>(builder.Configuration.GetSection("Adapter"));
 
-builder.Services.AddDbContext<UserContext>(options =>
+builder.Services.AddDbContext<HexagonDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // add application services

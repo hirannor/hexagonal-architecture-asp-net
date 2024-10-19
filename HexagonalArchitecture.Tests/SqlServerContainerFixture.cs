@@ -1,28 +1,21 @@
-﻿using TestContainers.Container.Abstractions.Hosting;
-using TestContainers.Container.Database.Hosting;
-using TestContainers.Container.Database.MsSql;
+﻿using Testcontainers.MsSql;
 
 namespace DotnetWebApi.Tests;
 
 public class SqlServerContainerFixture : IAsyncLifetime
 {
-    private const string DatabaseName = "HexagonalArchitectureTests";
-    private const string DatabaseUserName = "sa";
-    private const string DatabasePassword = "YourStrong(!)Password";
 
-    private readonly MsSqlContainer _sqlContainer = new ContainerBuilder<MsSqlContainer>()
-        .ConfigureDatabaseConfiguration(DatabaseName, DatabaseUserName, DatabasePassword)
-        .Build();
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
     public async Task InitializeAsync()
     {
-        await _sqlContainer.StartAsync();
+        await _msSqlContainer.StartAsync();
     }
 
     public async Task DisposeAsync()
     {
-        await _sqlContainer.StopAsync();
+        await _msSqlContainer.StopAsync();
     }
 
-    public string ConnectionString => _sqlContainer.GetConnectionString(DatabaseName);
+    public string ConnectionString => _msSqlContainer.GetConnectionString();
 }

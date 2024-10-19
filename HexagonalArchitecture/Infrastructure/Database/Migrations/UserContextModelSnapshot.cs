@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(HexagonDbContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

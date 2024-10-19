@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 
-internal sealed class UserEfRepository(UserContext context) : IUserRepository
+internal sealed class UserEfRepository(HexagonDbContext context) : IUserRepository
 {
     private bool _disposedValue;
     

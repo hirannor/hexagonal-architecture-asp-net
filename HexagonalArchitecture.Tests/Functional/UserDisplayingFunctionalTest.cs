@@ -1,54 +1,54 @@
 ﻿using System.ComponentModel;
 using System.Net.Http.Json;
 using FluentAssertions;
-using HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using UserModel = HexagonalArchitecture.Adapter.Web.Rest.Model.UserModel;
 
 namespace DotnetWebApi.Tests.Functional;
 
 [DisplayName("UserDisplaying")]
-public class UserDisplayingFunctionalTest : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<SqlServerContainerFixture>
+public class UserDisplayingFunctionalTest : 
+    IClassFixture<WebApplicationFactory<Program>>, 
+    IClassFixture<SqlServerContainerFixture>, IDisposable
 {
+    private const string ApiBasePath = "/api/users/";
+
+    private readonly WebApplicationFactory<Program> _webApplicationFactory;
     private readonly HttpClient _client;
 
-    public UserDisplayingFunctionalTest(WebApplicationFactory<Program> factory, SqlServerContainerFixture sqlServerContainer)
+    public UserDisplayingFunctionalTest(SqlServerContainerFixture fixture)
     {
-        var webHostBuilder = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureServices(services =>
-            {
-                services.RemoveAll(typeof(UserContext));
-                
-                services.AddDbContext<UserContext>(options =>
-                    options.UseSqlServer(sqlServerContainer.ConnectionString));
-            });
-        });
+        var clientOptions = new WebApplicationFactoryClientOptions();
+        clientOptions.AllowAutoRedirect = false;
 
-        _client = webHostBuilder.CreateClient();
+        _webApplicationFactory = new CustomWebApplicationFactory(fixture);
+        _client = _webApplicationFactory.CreateClient(clientOptions);
     }
 
-    [Fact(Skip = "This test is temporarily disabled due the issue with test containers and docker")]
+    [Fact]
+    [DisplayName("should display user by id after successful creation")]
     public async Task DisplayBy_ShouldReturnUser_WhenUserExists()
     {
-        const string emailAddress = "user@dtest.com";
+        const string emailAddress = "user@user.com";
         const string fullName = "Test User";
         const int age = 19;
         
         var expectedUserModel = UserModel.From("", emailAddress, fullName, age);
         
         var userToCreate = CreateUserModel.From(emailAddress, fullName, age);
-        var createdUserResponse = await _client.PostAsJsonAsync("/api/users", userToCreate);
+        var createdUserResponse = await _client.PostAsJsonAsync(ApiBasePath, userToCreate);
         var createdUserModel = await createdUserResponse.Content.ReadFromJsonAsync<UserModel>();
         var userId = createdUserModel.UserId;
         
-        var getUserByIdResponse = await _client.GetAsync($"/api/users/{userId}");
+        var getUserByIdResponse = await _client.GetAsync($"{ApiBasePath}{userId}");
         var userModel = await getUserByIdResponse.Content.ReadFromJsonAsync<UserModel>();
         
         userModel.Should().BeEquivalentTo(expectedUserModel, options => options.Excluding(user => user.UserId));
+    }
+    
+    public void Dispose()
+    {
+        _webApplicationFactory.Dispose();
     }
 }
