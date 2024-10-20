@@ -21,7 +21,7 @@ public class AspNetIdentityAuthentication(
     {
         if (string.IsNullOrWhiteSpace(cmd.EmailAddress.Value) || string.IsNullOrWhiteSpace(cmd.Password))
         {
-            return Result.Failure([EmailAddressAndPasswordIsEmpty]);
+            throw new ArgumentException(EmailAddressAndPasswordIsEmpty);
         }
 
         var emailAddressValue = cmd.EmailAddress.Value;
@@ -36,7 +36,7 @@ public class AspNetIdentityAuthentication(
     {
         if (string.IsNullOrWhiteSpace(cmd.EmailAddress.Value) || string.IsNullOrWhiteSpace(cmd.Password))
         {
-            return Result<AuthUser>.Failure([EmailAddressAndPasswordIsEmpty]);
+            throw new ArgumentException(EmailAddressAndPasswordIsEmpty);
         }
     
         var user = await userManager.FindByNameAsync(cmd.EmailAddress.Value);

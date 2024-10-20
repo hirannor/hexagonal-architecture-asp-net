@@ -1,5 +1,4 @@
-﻿using HexagonalArchitecture.Adapter.Web.Rest.Mapping;
-using HexagonalArchitecture.Adapter.Web.Rest.Mapping.User;
+﻿using HexagonalArchitecture.Adapter.Web.Rest.Mapping.User;
 using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
@@ -51,7 +50,7 @@ public class UserManagementController(
         var domain = await userCreation.CreateBy(cmd);
         var ret = _mapUserToModel.Apply(domain);
 
-        return CreatedAtAction(nameof(DisplayBy), new { Id = ret.UserId }, ret);
+        return CreatedAtAction(nameof(DisplayById), new { Id = ret.UserId }, ret);
     }
 
     [HttpGet]
@@ -76,7 +75,7 @@ public class UserManagementController(
 
         if (domain is null)
         {
-            var details = CreateUserNotFoundProblemDetailsFor(userId);
+            var details = CreateUserNotFoundBy(userId);
             return NotFound(details);
         }
 
@@ -88,14 +87,14 @@ public class UserManagementController(
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserModel>> DisplayBy(string id)
+    public async Task<ActionResult<UserModel>> DisplayById(string id)
     {
         var userId = UserId.From(id);
         var domain = await userDisplay.DisplayBy(userId);
 
         if (domain is null)
         {
-            var details = CreateUserNotFoundProblemDetailsFor(userId);
+            var details = CreateUserNotFoundBy(userId);
             return NotFound(details);
         }
 
@@ -103,13 +102,52 @@ public class UserManagementController(
 
         return Ok(model);
     }
+    
+    [HttpGet("by-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<UserModel>> DisplayByEmail([FromQuery(Name = "email")] string emailValue)
+    {
+        if (string.IsNullOrWhiteSpace(emailValue))
+        {
+            var details = ProblemDetailsFactory.CreateProblemDetails(
+                HttpContext,
+                400,
+                "Email address is required"
+            );
+            
+            return BadRequest(details);
+        }
 
-    private ProblemDetails CreateUserNotFoundProblemDetailsFor(UserId userId)
+        var emailAddress = EmailAddress.From(emailValue);
+        var domain = await userDisplay.DisplayBy(emailAddress);
+
+        if (domain is null)
+        {
+            var details = CreateUserNotFoundBy(emailAddress);
+            return NotFound(details);
+        }
+
+        var model = _mapUserToModel.Apply(domain);
+        return Ok(model);
+    }
+    
+    private ProblemDetails CreateUserNotFoundBy(EmailAddress email)
     {
         return ProblemDetailsFactory.CreateProblemDetails(
             HttpContext,
             404,
-            $"User not found with id: {userId}"
+            $"User not found with email address: {email.Value}"
+        );
+    }
+
+    private ProblemDetails CreateUserNotFoundBy(UserId id)
+    {
+        return ProblemDetailsFactory.CreateProblemDetails(
+            HttpContext,
+            404,
+            $"User not found with id: {id.Value}"
         );
     }
 }

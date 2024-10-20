@@ -7,5 +7,7 @@ namespace HexagonalArchitecture.Application.UseCase
         Task<List<User>> DisplayAll();
 
         Task<User> DisplayBy(UserId id);
+        
+        Task<User> DisplayBy(EmailAddress emailAddress);
     }
 }

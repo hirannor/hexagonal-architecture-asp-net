@@ -14,9 +14,9 @@ public class UserRegistrationService(
 {
     private const string RegisterUserCmdIsNull = "RegisterUser command should not be null!";
 
-    public async Task<Result> Register(RegisterUser cmd)
+    public async Task Register(RegisterUser cmd)
     {
-        if (cmd == null)
+        if (cmd is null)
         {
             logger.LogError(RegisterUserCmdIsNull);
             ArgumentNullException.ThrowIfNull(RegisterUserCmdIsNull);
@@ -36,14 +36,12 @@ public class UserRegistrationService(
         if (!registrationResult.IsSuccess)
         {
             logger.LogError("User registration failed");
-            throw new UserRegistrationFailed("User registration failed");
+            throw new UserRegistrationFailed(registrationResult.Errors);
         }
 
         var domainUser = User.Create(CreateUser.Issue(cmd.EmailAddress, cmd.FullName, cmd.Age));
         await users.Insert(domainUser);
 
-        logger.LogInformation("User {email} was registered successfully", cmd.EmailAddress.Value);
-        
-        return Result.Success();
+        logger.LogInformation("User with {email} was registered successfully", cmd.EmailAddress.Value);
     }
 }

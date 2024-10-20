@@ -22,6 +22,16 @@ public class ExceptionFilter : IExceptionFilter
                 problemDetails.Status = StatusCodes.Status409Conflict;
                 problemDetails.Title = emailAddressAlreadyExist.Message;
                 break;
+            case UserRegistrationFailed userRegistrationFailed:
+                problemDetails.Status = StatusCodes.Status409Conflict;
+                problemDetails.Title = userRegistrationFailed.Message;
+                problemDetails.Extensions.Add("errors", userRegistrationFailed.Errors);
+                break;
+            case UserAuthenticationFailed userAuthenticationFailed:
+                problemDetails.Status = StatusCodes.Status401Unauthorized;
+                problemDetails.Title = userAuthenticationFailed.Message;
+                problemDetails.Extensions.Add("errors", userAuthenticationFailed.Errors);
+                break;
             default:
                 problemDetails.Title = "An unexpected error occurred.";
                 break;
@@ -34,4 +44,5 @@ public class ExceptionFilter : IExceptionFilter
 
         context.ExceptionHandled = true;
     }
+    
 }

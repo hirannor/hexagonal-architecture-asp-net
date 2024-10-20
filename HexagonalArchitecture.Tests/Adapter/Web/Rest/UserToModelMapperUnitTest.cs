@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using FluentAssertions;
-using HexagonalArchitecture.Adapter.Web.Rest.Mapping;
 using HexagonalArchitecture.Adapter.Web.Rest.Mapping.User;
 using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Domain;

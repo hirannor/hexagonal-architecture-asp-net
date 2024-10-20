@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using HexagonalArchitecture.Application.Port;
+﻿using HexagonalArchitecture.Application.Port;
 using HexagonalArchitecture.Infrastructure.Adapter;
 
 namespace HexagonalArchitecture.Adapter.Notification.Email;

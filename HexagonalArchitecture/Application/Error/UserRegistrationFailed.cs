@@ -2,15 +2,23 @@
 
 public class UserRegistrationFailed : Exception
 {
-    public string EmailAddress { get; }
+    public IEnumerable<string> Errors { get; }
 
     public UserRegistrationFailed(string message)
         : base(message)
     {
+        Errors = new List<string> { message };
     }
 
-    public UserRegistrationFailed(string message, Exception inner)
-        : base(message, inner)
+    public UserRegistrationFailed(IEnumerable<string> errors)
+        : base("User registration failed with multiple errors.")
     {
+        Errors = errors.ToList();
+    }
+
+    public UserRegistrationFailed(IEnumerable<string> errors, Exception inner)
+        : base("User registration failed with multiple errors.", inner)
+    {
+        Errors = errors.ToList();
     }
 }

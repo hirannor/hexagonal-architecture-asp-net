@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using HexagonalArchitecture.Application.Port;
 using HexagonalArchitecture.Domain;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,6 +10,11 @@ public class JwtTokenGenerator(IConfiguration configuration)
 {
     public string Generate(AuthUser user)
     {
+        if (user is null)
+        {
+            ArgumentNullException.ThrowIfNull("AuthUser cannot be null!");
+        }
+
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName),

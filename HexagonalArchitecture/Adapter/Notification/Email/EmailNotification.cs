@@ -1,5 +1,6 @@
 ﻿using HexagonalArchitecture.Application.Port;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
@@ -33,7 +34,7 @@ public class EmailNotification(ILogger<EmailNotification> logger, IOptions<Email
             await _smtpClient.ConnectAsync(
                 _emailSettings.SmtpServer,
                 _emailSettings.Port,
-                MailKit.Security.SecureSocketOptions.StartTls
+                SecureSocketOptions.StartTls
             );
             
             logger.LogDebug("Connection established successfully to SMTP server.");

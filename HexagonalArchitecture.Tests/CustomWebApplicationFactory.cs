@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using HexagonalArchitecture.Adapter.Authentication.AspNetIdentity;
 using HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,8 +17,10 @@ public class CustomWebApplicationFactory(SqlServerContainerFixture fixture) : We
         builder.ConfigureServices(services =>
         {
             services.Remove(services.SingleOrDefault(service => typeof(DbContextOptions<HexagonDbContext>) == service.ServiceType));
+            services.Remove(services.SingleOrDefault(service => typeof(DbContextOptions<AspNetIdentityDbContext>) == service.ServiceType));
             services.Remove(services.SingleOrDefault(service => typeof(DbConnection) == service.ServiceType));
             services.AddDbContext<HexagonDbContext>((_, option) => option.UseSqlServer(_connectionString));
+            services.AddDbContext<AspNetIdentityDbContext>((_, option) => option.UseSqlServer(_connectionString));
         });
     }
 }

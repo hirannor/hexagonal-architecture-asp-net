@@ -1,10 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Text;
+﻿using System.Text;
 using HexagonalArchitecture.Application.Port;
 using HexagonalArchitecture.Infrastructure.Adapter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HexagonalArchitecture.Adapter.Authentication.AspNetIdentity;
 

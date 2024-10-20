@@ -10,7 +10,7 @@ public class NotificationService(ILogger<NotificationService> logger, IEmailNoti
 
     public void Send(SendEmailNotification cmd)
     {
-        if (cmd == null)
+        if (cmd is null)
         {
             logger.LogError(SendEmailNotificationCmdIsNull);
             ArgumentNullException.ThrowIfNull(SendEmailNotificationCmdIsNull);

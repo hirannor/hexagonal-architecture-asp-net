@@ -17,10 +17,11 @@ public class UserManagementService(
     private const string CreateUserCommandIsNull = "CreateUser command cannot be null!";
     private const string ChangeUserDetailsCommandIsNull = "ChangeUserDetails command cannot be null!";
     private const string UserIdentifierCannotBeNull = "User identifier cannot be null!";
+    private const string EmailAddressCannotBeNull = "Email address cannot be null!";
 
     public async Task<User> ChangeBy(ChangeUserDetails cmd)
     {
-        if (cmd == null)
+        if (cmd is null)
         {
             logger.LogError(ChangeUserDetailsCommandIsNull);
             ArgumentNullException.ThrowIfNull(ChangeUserDetailsCommandIsNull);
@@ -46,7 +47,7 @@ public class UserManagementService(
 
     public async Task<User> CreateBy(CreateUser cmd)
     {
-        if (cmd == null)
+        if (cmd is null)
         {
             logger.LogError(CreateUserCommandIsNull);
             ArgumentNullException.ThrowIfNull(CreateUserCommandIsNull);
@@ -75,7 +76,7 @@ public class UserManagementService(
 
     public async Task DeleteBy(UserId id)
     {
-        if (id == null)
+        if (id is null)
         {
             logger.LogError(UserIdentifierCannotBeNull);
             ArgumentNullException.ThrowIfNull(UserIdentifierCannotBeNull);
@@ -90,13 +91,13 @@ public class UserManagementService(
 
     public async Task<List<User>> DisplayAll()
     {
-        logger.LogInformation("Retrieving all users");
+        logger.LogInformation("Retrieving all users...");
         return await users.ListAll();
     }
 
     public async Task<User> DisplayBy(UserId id)
     {
-        if (id == null)
+        if (id is null)
         {
             logger.LogError(UserIdentifierCannotBeNull);
             ArgumentNullException.ThrowIfNull(UserIdentifierCannotBeNull);
@@ -105,5 +106,18 @@ public class UserManagementService(
         logger.LogInformation("Retrieving user with {id}", id);
 
         return await users.FindBy(id);
+    }
+
+    public async Task<User> DisplayBy(EmailAddress emailAddress)
+    {
+        if (emailAddress is null)
+        {
+            logger.LogError(EmailAddressCannotBeNull);
+            ArgumentNullException.ThrowIfNull(EmailAddressCannotBeNull);
+        }
+
+        logger.LogInformation("Retrieving user with {emailAddress}", emailAddress.Value);
+
+        return await users.FindBy(emailAddress);
     }
 }
