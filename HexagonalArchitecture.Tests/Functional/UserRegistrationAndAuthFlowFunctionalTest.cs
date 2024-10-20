@@ -8,7 +8,7 @@ using UserModel = HexagonalArchitecture.Adapter.Web.Rest.Model.UserModel;
 
 namespace DotnetWebApi.Tests.Functional;
 
-[DisplayName("UserDisplaying")]
+[DisplayName("UserRegistrationAndAuthFlow")]
 public class UserRegistrationAndAuthFlowFunctionalTest : 
     IClassFixture<WebApplicationFactory<Program>>, 
     IClassFixture<SqlServerContainerFixture>, IDisposable
