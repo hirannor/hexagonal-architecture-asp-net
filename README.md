@@ -38,3 +38,11 @@ Currently available adapters for configuration:
   - EventBus
 - Web
   - Rest 
+
+## API Documentation
+You can access the Swagger UI locally at the following URL:
+
+[http://localhost:5194/swagger/index.html](http://localhost:5194/swagger/index.html)
+
+
+![Preview](Images/swagger-ui.jpg)
