@@ -3,7 +3,7 @@ using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 
-namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping;
+namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping.User;
 
 internal class ChangeUserDetailsModelToDomainMapper(string userId)
     : IFunction<ChangeUserDetailsModel, ChangeUserDetails>

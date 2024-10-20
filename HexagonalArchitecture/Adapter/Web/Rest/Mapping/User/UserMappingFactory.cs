@@ -1,9 +1,8 @@
 ﻿using HexagonalArchitecture.Adapter.Web.Rest.Model;
-using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 
-namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping;
+namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping.User;
 
 public static class UserMappingFactory
 {
@@ -18,7 +17,7 @@ public static class UserMappingFactory
         return new CreateUserModelToDomainMapper();
     }
 
-    public static IFunction<User, UserModel> CreateUserToModelMapper()
+    public static IFunction<Domain.User, UserModel> CreateUserToModelMapper()
     {
         return new UserToModelMapper();
     }

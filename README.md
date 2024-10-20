@@ -16,6 +16,8 @@ In the appsettings.json or appsettings.Development.json file, you can configure 
 ```JSON
 {
   "Adapter": {
+    "Web": "Rest",
+    "Authentication": "AspNetIdentity",
     "Persistence": "EntityFramework",
     "Messaging": "EventBus",
     "Notification": "Email"
@@ -23,10 +25,16 @@ In the appsettings.json or appsettings.Development.json file, you can configure 
 }
 ```
 
-Currently, only the Persistence and Notification adapter has two different implementations, which are as follows:
+Currently available adapters for configuration:
+- Authentication:
+  - AspNetIdentity
 - Persistence:
   - EntityFramework
   - InMemory (not fully implemented; only the base classes have been created for demonstration purposes)
 - Notification:
   - Email
   - Mock
+- Messaging
+  - EventBus
+- Web
+  - Rest 

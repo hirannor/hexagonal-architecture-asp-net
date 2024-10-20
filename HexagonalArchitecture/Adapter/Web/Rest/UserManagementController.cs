@@ -1,13 +1,16 @@
 ﻿using HexagonalArchitecture.Adapter.Web.Rest.Mapping;
+using HexagonalArchitecture.Adapter.Web.Rest.Mapping.User;
 using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HexagonalArchitecture.Adapter.Web.Rest;
 
+[Authorize]
 [Route("api/users")]
 [ApiController]
 public class UserManagementController(

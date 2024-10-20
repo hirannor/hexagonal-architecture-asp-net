@@ -61,7 +61,7 @@ internal sealed class UserEfRepository(HexagonDbContext context) : IUserReposito
     {
         ArgumentNullException.ThrowIfNull(emailAddress, "Email address cannot be null!");
 
-        var model = await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.value);
+        var model = await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.Value);
 
         return _mapUserModelToDomain.Apply(model);
     }

@@ -2,7 +2,7 @@
 
 public record EmailAddress
 {
-    public string value { get; }
+    public string Value { get; }
 
     private EmailAddress(string value)
     {
@@ -11,7 +11,7 @@ public record EmailAddress
             throw new ArgumentNullException(nameof(value));
         }
 
-        this.value = value;
+        Value = value;
     }
 
     public static EmailAddress From(string emailAddress)

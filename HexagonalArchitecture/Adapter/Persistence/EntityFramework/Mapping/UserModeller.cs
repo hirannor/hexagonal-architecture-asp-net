@@ -21,7 +21,7 @@ public class UserModeller : IModeller<UserModel>
     {
         if (input is null) return null;
 
-        input.EmailAddress = _domain.EmailAddress.value;
+        input.EmailAddress = _domain.EmailAddress.Value;
         input.FullName = _domain.FullName;
         input.Age = _domain.Age.value;
 

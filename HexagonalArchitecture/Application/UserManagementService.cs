@@ -28,11 +28,11 @@ public class UserManagementService(
 
         var domain = await users.FindBy(cmd.UserId);
 
-        if (domain.EmailAddress.value == cmd.EmailAddress.value)
+        if (domain.EmailAddress.Value == cmd.EmailAddress.Value)
         {
-            logger.LogError("Email address: {email} already in use", cmd.EmailAddress.value);
+            logger.LogError("Email address: {email} already in use", cmd.EmailAddress.Value);
             throw new UserWithEmailAddressAlreadyExist(
-                $"Email address: {cmd.EmailAddress.value} already in use", cmd.EmailAddress.value);
+                $"Email address: {cmd.EmailAddress.Value} already in use", cmd.EmailAddress.Value);
         }
 
         var changedDetailsToPersist = domain.ChangeBy(cmd);
@@ -56,9 +56,9 @@ public class UserManagementService(
 
         if (foundUser is not null)
         {
-            logger.LogError("Email address: {email} already in use", cmd.EmailAddress.value);
+            logger.LogError("Email address: {email} already in use", cmd.EmailAddress.Value);
             throw new UserWithEmailAddressAlreadyExist(
-                $"Email address: {cmd.EmailAddress} already in use", cmd.EmailAddress.value);
+                $"Email address: {cmd.EmailAddress} already in use", cmd.EmailAddress.Value);
         }
 
         var domain = User.Create(cmd);
