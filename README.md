@@ -2,7 +2,7 @@
 
 
 ## Overview
-This project showcases an ASP.NET application that implements the port-and-adapter (hexagonal) architecture along with Domain-Driven Design (DDD). The focus is on clean architecture principles, facilitating a modular approach that separates concerns, making it easier to maintain and test.
+The project was created purely for practice, helping me become more familiar with C# and ASP.NET after 10 years of Java development. It doesn't have any specific business value and may contain missing elements or mistakes. The domain is simple, supporting only user registration, authentication, and basic user detail management. It showcases an ASP.NET application that implements the port-and-adapter (hexagonal) architecture along with Domain-Driven Design (DDD), focusing on clean architecture principles to facilitate a modular approach, separating concerns for easier maintenance and testing.
 
 |Build Status|License|
 |------------|-------|
