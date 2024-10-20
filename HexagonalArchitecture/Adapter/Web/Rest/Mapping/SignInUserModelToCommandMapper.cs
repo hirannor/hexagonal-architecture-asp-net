@@ -3,7 +3,7 @@ using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 
-namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping.Auth;
+namespace HexagonalArchitecture.Adapter.Web.Rest.Mapping;
 
 public class SignInUserModelToCommandMapper : IFunction<SignInUserModel, SignInUser>
 {

@@ -34,7 +34,6 @@ public class UserManagementController(
             .Apply(model);
 
         var domain = await userDetailsModification.ChangeBy(cmd);
-
         var response = _mapUserToModel.Apply(domain);
 
         return Ok(response);

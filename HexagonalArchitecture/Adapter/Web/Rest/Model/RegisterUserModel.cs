@@ -8,6 +8,7 @@ public record RegisterUserModel(
     string EmailAddress,
 
     [Required(ErrorMessage = "Please provide a password.")]
+    [Length(6, 20, ErrorMessage = "Please provide a password between 6 and 20 characters.")]
     string Password,
         
     [Required(ErrorMessage = "Please provide a full name.")]

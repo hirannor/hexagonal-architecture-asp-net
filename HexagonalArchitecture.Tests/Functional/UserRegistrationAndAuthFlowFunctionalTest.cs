@@ -15,6 +15,7 @@ public class UserRegistrationAndAuthFlowFunctionalTest :
 {
     private const string UsersApiBasePath = "/api/users";
     private const string AuthApiBasePath = "/api/auth";
+    private const string RegisterApiBasePath = "/api/register";
 
     private readonly HttpClient _client;
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
@@ -29,7 +30,7 @@ public class UserRegistrationAndAuthFlowFunctionalTest :
         _client = _webApplicationFactory.CreateClient(clientOptions);
     }
 
-    [DisplayName("should display user by id after successful authentication")]
+    [DisplayName("should display user by id after successful registration and authentication")]
     [Fact]
     public async Task DisplayBy_ShouldReturnUser_WhenUserExists()
     {
@@ -42,15 +43,15 @@ public class UserRegistrationAndAuthFlowFunctionalTest :
         var userRegisterModel = RegisterUserModel.From(emailAddress, password, fullName, age);
         var signInUserModel = SignInUserModel.From(emailAddress, password);
         
-        await _client.PostAsJsonAsync($"{AuthApiBasePath}/register", userRegisterModel);
-        var authResponse = await _client.PostAsJsonAsync($"{AuthApiBasePath}/login", signInUserModel);
+        await _client.PostAsJsonAsync($"{RegisterApiBasePath}", userRegisterModel);
+        var authResponse = await _client.PostAsJsonAsync($"{AuthApiBasePath}", signInUserModel);
         var jwtToken = await authResponse.Content.ReadFromJsonAsync<JwtTokenModel>(); 
 
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken.value);
 
         // when
-        var getUserByIdEmail= await _client.GetAsync($"{UsersApiBasePath}/by-email?email={emailAddress}");
-        var userModel = await getUserByIdEmail.Content.ReadFromJsonAsync<UserModel>();
+        var userByEmail= await _client.GetAsync($"{UsersApiBasePath}/by-email?email={emailAddress}");
+        var userModel = await userByEmail.Content.ReadFromJsonAsync<UserModel>();
         
         // then
         userModel.Should().BeEquivalentTo(expectedUserModel, options => options.Excluding(user => user.UserId));
