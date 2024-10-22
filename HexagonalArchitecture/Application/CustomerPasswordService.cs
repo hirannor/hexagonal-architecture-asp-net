@@ -36,9 +36,10 @@ public class CustomerPasswordService(
         }
 
         logger.LogInformation("Successfully changed password for user: {Username}", cmd.Username);
-
-        scope.Complete();
+        
         events.Publish(domain.ListEvents());
         domain.ClearEvents();
+        
+        scope.Complete();
     }
 }

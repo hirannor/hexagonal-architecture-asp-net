@@ -49,11 +49,13 @@ internal class CustomerService(
 
         domain.ChangeBy(cmd);
         await customers.Save(domain);
-        scope.Complete();
 
         logger.LogInformation("Successfully changed email address for user: {Username}", cmd.Username);
+        
         events.Publish(domain.ListEvents());
         domain.ClearEvents();
+        
+        scope.Complete();
     }
 
     public async Task<Customer> ChangeBy(ChangePersonalDetails cmd)

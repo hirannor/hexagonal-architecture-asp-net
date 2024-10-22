@@ -1,4 +1,5 @@
-﻿using HexagonalArchitecture.Application.Error;
+﻿using System.Transactions;
+using HexagonalArchitecture.Application.Error;
 using HexagonalArchitecture.Application.Port;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
@@ -15,6 +16,8 @@ internal class CustomerRegistrationService(
 {
     public async Task Register(RegisterCustomer cmd)
     {
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
         var email = EmailAddress.From(cmd.EmailAddress);
 
         if (await customers.FindBy(email) is not null)
@@ -42,9 +45,11 @@ internal class CustomerRegistrationService(
             throw new RegistrationFailed(registrationResult.Errors);
         }
 
+        logger.LogInformation("Customer with {username} and {email} was registered successfully", cmd.Username, email);
+        
         eventPublishing.Publish(domain.ListEvents());
         domain.ClearEvents();
-
-        logger.LogInformation("Customer with {username} and {email} was registered successfully", cmd.Username, email);
+        
+        scope.Complete();
     }
 }
