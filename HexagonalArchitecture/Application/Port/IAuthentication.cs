@@ -5,6 +5,8 @@ namespace HexagonalArchitecture.Application.Port;
 
 public interface IAuthentication
 {
-    Task<Result> Register(RegisterUser cmd);
-    Task<Result<AuthUser>> Login(SignInUser cmd);
+    Task<Result> ChangeEmailAddress(ChangeEmailAddress cmd);
+    Task<Result> ChangePassword(ChangePassword cmd);
+    Task<Result<AuthUser>> Login(SignInCustomer cmd);
+    Task<Result> Register(RegisterCustomer cmd);
 }

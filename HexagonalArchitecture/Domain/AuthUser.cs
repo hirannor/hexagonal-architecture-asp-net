@@ -2,5 +2,4 @@
 
 public record AuthUser(string UserName, string EmailAddress)
 {
-    
 }

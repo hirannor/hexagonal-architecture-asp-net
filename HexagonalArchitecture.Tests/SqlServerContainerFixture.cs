@@ -4,7 +4,6 @@ namespace DotnetWebApi.Tests;
 
 public class SqlServerContainerFixture : IAsyncLifetime
 {
-
     private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
     public async Task InitializeAsync()

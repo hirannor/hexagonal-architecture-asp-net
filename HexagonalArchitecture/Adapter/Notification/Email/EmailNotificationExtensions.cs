@@ -20,7 +20,7 @@ public static class EmailNotificationExtensions
         }
 
         if (EmailValue != adapterSettings.Notification) return services;
-        
+
         services.AddTransient<IEmailNotification, EmailNotification>();
         services.Configure<EmailSettings>(configuration.GetSection(EmailSettings));
 

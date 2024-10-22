@@ -14,22 +14,12 @@ public class EventBusIngestionHandler(ILogger<EventBusIngestionHandler> logger, 
 
         switch (message)
         {
-            case UserCreated userCreated:
-                logger.LogDebug("Handling UserCreated event: {evt}", userCreated);
+            case CustomerRegistered evt:
+                logger.LogDebug("Handling UserCreated event: {evt}", evt);
                 notification.Send(SendEmailNotification.Create(
-                        userCreated.EmailAddress.Value,
-                        "UserCreated",
-                        "User has been created successfully."
-                    )
-                );
-                break;
-            case UserDetailsChanged userDetailsChanged:
-                logger.LogDebug("Handling UserDetailsChanged event: {evt}", userDetailsChanged);
-                notification.Send(SendEmailNotification.Create(
-                        userDetailsChanged.EmailAddress.Value,
-                        "UserDetailsChanged",
-                        "User details has been modified successfully."
-                    )
+                    evt.EmailAddress.Value,
+                    "User registration",
+                    "User with" + evt.Username.Value + "has been registered successfully.")
                 );
                 break;
             default:

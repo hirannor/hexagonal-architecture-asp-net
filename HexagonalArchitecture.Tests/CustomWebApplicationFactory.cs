@@ -16,8 +16,10 @@ public class CustomWebApplicationFactory(SqlServerContainerFixture fixture) : We
     {
         builder.ConfigureServices(services =>
         {
-            services.Remove(services.SingleOrDefault(service => typeof(DbContextOptions<HexagonDbContext>) == service.ServiceType));
-            services.Remove(services.SingleOrDefault(service => typeof(DbContextOptions<AspNetIdentityDbContext>) == service.ServiceType));
+            services.Remove(services.SingleOrDefault(service =>
+                typeof(DbContextOptions<HexagonDbContext>) == service.ServiceType));
+            services.Remove(services.SingleOrDefault(service =>
+                typeof(DbContextOptions<AspNetIdentityDbContext>) == service.ServiceType));
             services.Remove(services.SingleOrDefault(service => typeof(DbConnection) == service.ServiceType));
             services.AddDbContext<HexagonDbContext>((_, option) => option.UseSqlServer(_connectionString));
             services.AddDbContext<AspNetIdentityDbContext>((_, option) => option.UseSqlServer(_connectionString));

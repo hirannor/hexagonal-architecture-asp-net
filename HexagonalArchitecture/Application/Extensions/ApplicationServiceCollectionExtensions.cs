@@ -7,12 +7,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         // Application services
-        services.AddScoped<IUserCreation, UserManagementService>();
-        services.AddScoped<IUserDisplay, UserManagementService>();
-        services.AddScoped<IUserDeletion, UserManagementService>();
-        services.AddScoped<IUserDetailsModification, UserManagementService>();
-        services.AddScoped<IUserRegistration, UserRegistrationService>();
-        services.AddScoped<IUserSignIn, AuthenticationService>();
+        services.AddScoped<ICustomerDisplay, CustomerService>();
+        services.AddScoped<IChangePassword, CustomerPasswordService>();
+        services.AddScoped<IChangeEmailAddress, CustomerService>();
+        services.AddScoped<IChangePersonalDetails, CustomerService>();
+        services.AddScoped<ICustomerRegistration, CustomerRegistrationService>();
+        services.AddScoped<ICustomerSignIn, AuthenticationService>();
         services.AddScoped<IEventPublishing, EventPublisherService>();
         services.AddSingleton<INotificationSending, NotificationService>();
 

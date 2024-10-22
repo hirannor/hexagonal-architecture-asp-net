@@ -1,4 +1,5 @@
 ﻿using HexagonalArchitecture.Infrastructure;
+using static System.String;
 
 namespace HexagonalArchitecture.Application.Port;
 
@@ -12,8 +13,8 @@ public record SendEmailNotification(Guid Id, string EmailAddress, string Subject
         return new SendEmailNotification(
             ICommand.GenerateId(),
             emailAddress,
-            subject ?? string.Empty, 
-            content ?? string.Empty   
+            subject ?? Empty,
+            content ?? Empty
         );
     }
 }

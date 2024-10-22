@@ -18,16 +18,16 @@ public class ExceptionFilter : IExceptionFilter
 
         switch (context.Exception)
         {
-            case UserWithEmailAddressAlreadyExist emailAddressAlreadyExist:
+            case EmailAddressAlreadyExist emailAddressAlreadyExist:
                 problemDetails.Status = StatusCodes.Status409Conflict;
                 problemDetails.Title = emailAddressAlreadyExist.Message;
                 break;
-            case UserRegistrationFailed userRegistrationFailed:
+            case RegistrationFailed userRegistrationFailed:
                 problemDetails.Status = StatusCodes.Status409Conflict;
                 problemDetails.Title = userRegistrationFailed.Message;
                 problemDetails.Extensions.Add("errors", userRegistrationFailed.Errors);
                 break;
-            case UserAuthenticationFailed userAuthenticationFailed:
+            case AuthenticationFailed userAuthenticationFailed:
                 problemDetails.Status = StatusCodes.Status401Unauthorized;
                 problemDetails.Title = userAuthenticationFailed.Message;
                 problemDetails.Extensions.Add("errors", userAuthenticationFailed.Errors);
@@ -44,5 +44,4 @@ public class ExceptionFilter : IExceptionFilter
 
         context.ExceptionHandled = true;
     }
-    
 }

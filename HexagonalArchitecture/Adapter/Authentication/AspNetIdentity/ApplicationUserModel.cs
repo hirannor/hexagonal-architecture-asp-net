@@ -14,5 +14,4 @@ public class ApplicationUserModel : IdentityUser
 
         return user;
     }
-    
 }

@@ -13,7 +13,8 @@ public static class AspNetIdentityAuthenticationExtensions
     private const string AdapterSettingsSection = "Adapter";
     private const string AuthenticationValue = "AspNetIdentity";
 
-    public static IServiceCollection AddAspNetIdentityAuthenticationAdapter(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddAspNetIdentityAuthenticationAdapter(this IServiceCollection services,
+        IConfiguration configuration)
     {
         var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
@@ -28,7 +29,7 @@ public static class AspNetIdentityAuthenticationExtensions
         var issuer = jwtSettings["Issuer"];
         var audience = jwtSettings["Audience"];
         var key = jwtSettings["Key"];
-        
+
         services.AddDbContext<AspNetIdentityDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 

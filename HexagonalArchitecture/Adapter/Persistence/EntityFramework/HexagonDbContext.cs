@@ -4,18 +4,22 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 
 public class HexagonDbContext(DbContextOptions<HexagonDbContext> options) : DbContext(options)
 {
-    public DbSet<UserModel> Users { get; init; }
+    public DbSet<CustomerModel> Users { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<UserModel>()
+        modelBuilder.Entity<CustomerModel>()
             .HasIndex(u => u.EmailAddress)
             .IsUnique();
 
-        modelBuilder.Entity<UserModel>()
-            .HasIndex(u => u.UserId)
+        modelBuilder.Entity<CustomerModel>()
+            .HasIndex(u => u.CustomerId)
+            .IsUnique();
+
+        modelBuilder.Entity<CustomerModel>()
+            .HasIndex(u => u.Username)
             .IsUnique();
     }
 }

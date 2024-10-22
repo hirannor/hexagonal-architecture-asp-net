@@ -9,25 +9,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace HexagonalArchitecture.Adapter.Web.Rest;
 
 [ApiController]
-[AllowAnonymous] 
-[Route("api/[controller]")]
-public class AuthController( IUserSignIn auth, JwtTokenGenerator jwtToken)
+[AllowAnonymous]
+[Route("/api/[controller]")]
+public class AuthController(ICustomerSignIn auth, JwtTokenGenerator jwtToken)
     : ControllerBase
 {
-    private readonly IFunction<SignInUserModel, SignInUser> _mapSignInUserModelToCommand = new SignInUserModelToCommandMapper();
-    
+    private readonly IFunction<SignInModel, SignInCustomer> _mapSignInModelToCommand = new SignInModelToCommandMapper();
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Auth([FromBody] SignInUserModel model)
+    public async Task<ActionResult<JwtTokenModel>> Auth([FromBody] SignInModel model)
     {
-        var cmd = _mapSignInUserModelToCommand.Apply(model);
+        var cmd = _mapSignInModelToCommand.Apply(model);
         var authUser = await auth.SignIn(cmd);
-        
+
         var tokenValue = jwtToken.Generate(authUser);
-        
+
         return Ok(JwtTokenModel.From(tokenValue));
     }
-    
 }

@@ -6,31 +6,23 @@ using HexagonalArchitecture.Domain.Command;
 
 namespace HexagonalArchitecture.Application;
 
-public class AuthenticationService(
-    ILogger<AuthenticationService> logger, 
+internal class AuthenticationService(
+    ILogger<AuthenticationService> logger,
     IAuthentication authentication
-    ) : IUserSignIn
+) : ICustomerSignIn
 {
-    private const string SignInUserCmdIsNull = "SignInUserCmdIsNull command should be not null!";
-
-    public async Task<AuthUser> SignIn(SignInUser cmd)
+    public async Task<AuthUser> SignIn(SignInCustomer cmd)
     {
-        if (cmd is null)
-        {
-            logger.LogError(SignInUserCmdIsNull);
-            ArgumentNullException.ThrowIfNull(SignInUserCmdIsNull);
-        }
-        
-        logger.LogInformation("Attempting to sign in with: {cmd.EmailAddress.Value}", cmd.EmailAddress.Value);
+        logger.LogInformation("Attempting to sign in with username: {cmd}", cmd.Username);
         var result = await authentication.Login(cmd);
 
         if (!result.IsSuccess)
         {
             logger.LogError("User registration failed!");
-            throw new UserAuthenticationFailed(result.Errors);
+            throw new AuthenticationFailed(result.Errors);
         }
-        
-        logger.LogInformation("Sign in with: {cmd.EmailAddress.Value} was successful!", cmd.EmailAddress.Value);
+
+        logger.LogInformation("Sign in with username: {md.Username} was successful!", cmd.Username);
 
         return result.Value;
     }

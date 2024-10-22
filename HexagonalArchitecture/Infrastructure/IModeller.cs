@@ -2,5 +2,5 @@
 
 public interface IModeller<TO_MUTATE>
 {
-    TO_MUTATE To(TO_MUTATE from);
+    TO_MUTATE To(TO_MUTATE model);
 }

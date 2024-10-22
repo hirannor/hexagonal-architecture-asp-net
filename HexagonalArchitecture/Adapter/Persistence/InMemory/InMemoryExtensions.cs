@@ -5,18 +5,24 @@ namespace HexagonalArchitecture.Adapter.Persistence.InMemory;
 
 public static class InMemoryExtensions
 {
-    private const string Adapter = "Adapter";
+    private const string AdapterSettingsSection = "Adapter";
     private const string InMemory = "InMemory";
 
-    public static IServiceCollection AddInMemoryPersistenceAdapter(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInMemoryPersistenceAdapter(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(Adapter).Get<AdapterSettings>();
+        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+
+        if (adapterSettings == null)
+        {
+            throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
+        }
 
         if (InMemory == adapterSettings.Persistence)
         {
-            services.AddScoped<IUserRepository, UserInMemoryRepository>();
+            services.AddScoped<ICustomerRepository, CustomerInMemoryRepository>();
         }
-        
+
         return services;
     }
 }

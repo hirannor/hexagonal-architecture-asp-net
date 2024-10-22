@@ -25,4 +25,12 @@
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="obj\Debug\net8.0\Hexagona.AF411E22.Up2Date" />
+      <Content Include="obj\Debug\net8.0\HexagonalArchitecture.dll" />
+      <Content Include="obj\Debug\net8.0\HexagonalArchitecture.genruntimeconfig.cache" />
+      <Content Include="obj\Debug\net8.0\HexagonalArchitecture.pdb" />
+      <Content Include="obj\Debug\net8.0\staticwebassets.build.json" />
+    </ItemGroup>
+
 </Project>

@@ -18,9 +18,9 @@ public static class WebRestExtensions
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
-        
+
         if (RestValue != adapterSettings.Web) return services;
-        
+
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {

@@ -10,11 +10,6 @@ public class JwtTokenGenerator(IConfiguration configuration)
 {
     public string Generate(AuthUser user)
     {
-        if (user is null)
-        {
-            ArgumentNullException.ThrowIfNull("AuthUser cannot be null!");
-        }
-
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -25,8 +20,8 @@ public class JwtTokenGenerator(IConfiguration configuration)
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: configuration["Jwt:Issuer"], 
-            audience: configuration["Jwt:Audience"], 
+            issuer: configuration["Jwt:Issuer"],
+            audience: configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: credentials);

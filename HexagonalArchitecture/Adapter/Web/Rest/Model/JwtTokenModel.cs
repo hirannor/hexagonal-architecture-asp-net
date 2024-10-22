@@ -6,5 +6,4 @@ public record JwtTokenModel(string value)
     {
         return new JwtTokenModel(value);
     }
-    
 }

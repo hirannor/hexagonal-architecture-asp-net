@@ -17,12 +17,12 @@ public static class MockEmailNotificationExtensions
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
-        
+
         if (MockValue == adapterSettings.Notification)
         {
             services.AddSingleton<IEmailNotification, MockEmailNotification>();
         }
-        
+
         return services;
     }
 }
