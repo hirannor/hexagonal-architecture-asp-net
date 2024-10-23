@@ -7,19 +7,19 @@ namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 public class AddressModel
 {
     [Column("STREET_NAME", TypeName = "varchar(200)")]
-    public string StreetName { get; private set; }
+    public string? StreetName { get; private set; }
 
     [Column("STREET_NUMBER", TypeName = "varchar(20)")]
-    public string StreetNumber { get; private set; }
+    public string? StreetNumber { get; private set; }
 
     [Column("CITY_NAME", TypeName = "varchar(200)")]
-    public string CityName { get; private set; }
+    public string? CityName { get; private set; }
 
     [Column("POSTAL_CODE", TypeName = "varchar(20)")]
-    public string PostalCode { get; private set; }
+    public string? PostalCode { get; private set; }
 
     [Column("COUNTRY_NAME", TypeName = "varchar(200)")]
-    public string CountryName { get; private set; }
+    public string? CountryName { get; private set; }
 
     public AddressModel()
     {

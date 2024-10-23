@@ -15,35 +15,35 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
                 table: "CUSTOMERS",
                 type: "varchar(200)",
                 nullable: true,
-                defaultValue: "");
+                defaultValue: null);
 
             migrationBuilder.AddColumn<string>(
                 name: "COUNTRY_NAME",
                 table: "CUSTOMERS",
                 type: "varchar(200)",
                 nullable: true,
-                defaultValue: "");
+                defaultValue: null);
 
             migrationBuilder.AddColumn<string>(
                 name: "POSTAL_CODE",
                 table: "CUSTOMERS",
                 type: "varchar(20)",
                 nullable: true,
-                defaultValue: "");
+                defaultValue: null);
 
             migrationBuilder.AddColumn<string>(
                 name: "STREET_NAME",
                 table: "CUSTOMERS",
                 type: "varchar(200)",
                 nullable: true,
-                defaultValue: "");
+                defaultValue: null);
 
             migrationBuilder.AddColumn<string>(
                 name: "STREET_NUMBER",
                 table: "CUSTOMERS",
                 type: "varchar(20)",
                 nullable: true,
-                defaultValue: "");
+                defaultValue: null);
         }
 
         /// <inheritdoc />

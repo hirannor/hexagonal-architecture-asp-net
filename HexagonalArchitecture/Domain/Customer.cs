@@ -26,7 +26,7 @@ public class Customer(
 
     public DateOfBirth BirthOn { get; set; } = birthOn;
 
-    public Address Address { get; set; } = address;
+    public Address? Address { get; set; } = address;
 
     private readonly List<DomainEvent> _domainEvents = [];
 
