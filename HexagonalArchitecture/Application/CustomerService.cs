@@ -61,6 +61,7 @@ internal class CustomerService(
 
         scope.Complete();
     }
+
     public async Task<Customer> ChangeBy(ChangePersonalDetails cmd)
     {
         logger.LogInformation("Attempting to change personal details for customer with username: {Username}",

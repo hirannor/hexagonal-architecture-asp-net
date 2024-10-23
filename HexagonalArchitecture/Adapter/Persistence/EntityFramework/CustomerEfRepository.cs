@@ -1,10 +1,12 @@
 ﻿using HexagonalArchitecture.Adapter.Persistence.EntityFramework.Mapping;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Infrastructure;
+using HexagonalArchitecture.Infrastructure.Adapter;
 using Microsoft.EntityFrameworkCore;
 
 namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 
+[Adapter(type: AdapterType.Driven)]
 internal sealed class CustomerEfRepository(CustomersDbContext context) : ICustomerRepository
 {
     private bool _disposedValue;

@@ -3,6 +3,7 @@ using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
+using HexagonalArchitecture.Infrastructure.Adapter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace HexagonalArchitecture.Adapter.Web.Rest;
 
 [ApiController]
 [AllowAnonymous]
+[Adapter(type: AdapterType.Driver)]
 [Route("api/register")]
 public class RegistrationController(ICustomerRegistration registration)
     : ControllerBase

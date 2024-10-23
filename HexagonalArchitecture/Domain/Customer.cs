@@ -119,7 +119,7 @@ public class Customer(
     {
         return [.._domainEvents];
     }
-    
+
     private bool ShouldBuildAddress(ChangePersonalDetails cmd)
     {
         bool shouldBuildAddress = !string.IsNullOrEmpty(cmd.Country) ||

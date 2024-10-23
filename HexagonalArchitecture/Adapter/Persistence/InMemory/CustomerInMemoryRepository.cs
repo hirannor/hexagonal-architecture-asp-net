@@ -1,7 +1,9 @@
 ﻿using HexagonalArchitecture.Domain;
+using HexagonalArchitecture.Infrastructure.Adapter;
 
 namespace HexagonalArchitecture.Adapter.Persistence.InMemory;
 
+[Adapter(type: AdapterType.Driven)]
 internal class CustomerInMemoryRepository : ICustomerRepository
 {
     private Dictionary<string, CustomerModel> _users = new();

@@ -4,14 +4,16 @@ using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
+using HexagonalArchitecture.Infrastructure.Adapter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HexagonalArchitecture.Adapter.Web.Rest;
 
 [Authorize]
-[Route("/api/customers/{username}")]
 [ApiController]
+[Adapter(type: AdapterType.Driver)]
+[Route("/api/customers/{username}")]
 public class CustomerController(
     ICustomerDisplay customers,
     IChangePassword password,

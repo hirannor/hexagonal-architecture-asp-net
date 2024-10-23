@@ -1,4 +1,5 @@
 ﻿using HexagonalArchitecture.Application.Port;
+using HexagonalArchitecture.Infrastructure.Adapter;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
@@ -6,6 +7,7 @@ using MimeKit;
 
 namespace HexagonalArchitecture.Adapter.Notification.Email;
 
+[Adapter(type: AdapterType.Driven)]
 internal class EmailNotification(ILogger<EmailNotification> logger, IOptions<EmailSettings> settings)
     : IEmailNotification, IDisposable
 {

@@ -1,7 +1,9 @@
-﻿using HexagonalArchitecture.Infrastructure.Messaging;
+﻿using HexagonalArchitecture.Infrastructure.Adapter;
+using HexagonalArchitecture.Infrastructure.Messaging;
 
 namespace HexagonalArchitecture.Adapter.Messaging.EventBus;
 
+[Adapter(type: AdapterType.Driven)]
 public class EventBusMessagePublisher : IMessagePublisher
 {
     public event EventHandler<Message>? OnMessageReceived;

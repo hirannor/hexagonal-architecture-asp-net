@@ -1,10 +1,12 @@
 ﻿using HexagonalArchitecture.Application.Port;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain.Event;
+using HexagonalArchitecture.Infrastructure.Adapter;
 using HexagonalArchitecture.Infrastructure.Messaging;
 
 namespace HexagonalArchitecture.Adapter.Messaging.EventBus;
 
+[Adapter(type: AdapterType.Driver)]
 public class EventBusIngestionHandler(ILogger<EventBusIngestionHandler> logger, INotificationSending notification)
     : IMessageHandler
 {
