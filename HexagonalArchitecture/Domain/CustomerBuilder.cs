@@ -8,40 +8,47 @@ public class CustomerBuilder
     private FirstName? _firstName;
     private LastName? _lastName;
     private DateOfBirth? _birthOn;
+    private Address? _address;
 
-    public CustomerBuilder UserId(CustomerId customerId)
+    public CustomerBuilder WithUserId(CustomerId customerId)
     {
         _id = customerId;
         return this;
     }
 
-    public CustomerBuilder Username(Username username)
+    public CustomerBuilder WithUsername(Username username)
     {
         _username = username;
         return this;
     }
 
-    public CustomerBuilder EmailAddress(EmailAddress emailAddress)
+    public CustomerBuilder WithEmailAddress(EmailAddress emailAddress)
     {
         _emailAddress = emailAddress;
         return this;
     }
 
-    public CustomerBuilder FirstName(FirstName firstName)
+    public CustomerBuilder WithFirstName(FirstName firstName)
     {
         _firstName = firstName;
         return this;
     }
 
-    public CustomerBuilder LastName(LastName lastName)
+    public CustomerBuilder WithLastName(LastName lastName)
     {
         _lastName = lastName;
         return this;
     }
 
-    public CustomerBuilder BirthOn(DateOfBirth birthOn)
+    public CustomerBuilder WithBirthOn(DateOfBirth birthOn)
     {
         _birthOn = birthOn;
+        return this;
+    }
+
+    public CustomerBuilder WithAddress(Address address)
+    {
+        _address = address;
         return this;
     }
 
@@ -53,6 +60,8 @@ public class CustomerBuilder
             _emailAddress,
             _firstName,
             _lastName,
-            _birthOn);
+            _birthOn,
+            _address
+        );
     }
 }

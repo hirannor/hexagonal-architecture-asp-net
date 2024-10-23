@@ -49,7 +49,8 @@ public class CustomerPasswordChangeFunctionalTest :
             emailAddress,
             firstName,
             lastName,
-            birthOn
+            birthOn,
+            null
         );
 
         SignInModel signInModel = SignInModel.From(username, password);
@@ -60,13 +61,13 @@ public class CustomerPasswordChangeFunctionalTest :
 
         // when
         await _client.PutAsJsonAsync($"{UsersApiBasePath}/{username}/password", model);
-        
+
         signInModel = SignInModel.From(username, password);
         authResponse = await _client.PostAsJsonAsync($"{AuthApiBasePath}", signInModel);
         jwtToken = await authResponse.Content.ReadFromJsonAsync<JwtTokenModel>();
 
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken?.value);
-        
+
         HttpResponseMessage customerResponse = await _client.GetAsync($"{UsersApiBasePath}/{username}");
         CustomerModel? customerModel = await customerResponse.Content.ReadFromJsonAsync<CustomerModel>();
 

@@ -48,7 +48,8 @@ public class CustomerEmailAddressChangeFunctionalTest :
             newEmailAddress,
             firstName,
             lastName,
-            birthOn
+            birthOn,
+            null
         );
 
         SignInModel signInModel = SignInModel.From(username, password);

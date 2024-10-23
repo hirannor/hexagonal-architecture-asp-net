@@ -25,10 +25,12 @@ public class CustomerController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ChangePersonalDetailsModel>> ChangePersonalDetails(string username, [FromBody] ChangePersonalDetailsModel model)
+    public async Task<ActionResult<ChangePersonalDetailsModel>> ChangePersonalDetails(string username,
+        [FromBody] ChangePersonalDetailsModel model)
     {
-        IFunction<ChangePersonalDetailsModel, ChangePersonalDetails> mapChangePersonalDetailsModelToCommand = new ChangePersonalDetailsModelToCommandMapper(username);
-        
+        IFunction<ChangePersonalDetailsModel, ChangePersonalDetails> mapChangePersonalDetailsModelToCommand =
+            new ChangePersonalDetailsModelToCommandMapper(username);
+
         ChangePersonalDetails cmd = mapChangePersonalDetailsModelToCommand.Apply(model);
 
         Customer domain = await personalDetails.ChangeBy(cmd);
@@ -58,9 +60,11 @@ public class CustomerController(
     [HttpPut("password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ChangePasswordResultModel>> ChangePassword(string username, [FromBody] ChangePasswordModel model)
+    public async Task<ActionResult<ChangePasswordResultModel>> ChangePassword(string username,
+        [FromBody] ChangePasswordModel model)
     {
-        IFunction<ChangePasswordModel, ChangePassword> mapChangePasswordModelToCommand = new ChangePasswordModelToCommandMapper(username);
+        IFunction<ChangePasswordModel, ChangePassword> mapChangePasswordModelToCommand =
+            new ChangePasswordModelToCommandMapper(username);
         ChangePassword cmd = mapChangePasswordModelToCommand.Apply(model);
 
         await password.ChangeBy(cmd);
@@ -73,9 +77,11 @@ public class CustomerController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ChangeEmailAddressResultModel>> ChangeEmailAddress(string username, [FromBody] ChangeEmailAddressModel model)
+    public async Task<ActionResult<ChangeEmailAddressResultModel>> ChangeEmailAddress(string username,
+        [FromBody] ChangeEmailAddressModel model)
     {
-        IFunction<ChangeEmailAddressModel, ChangeEmailAddress> mapChangeEmailAddressModelToCommand = new ChangeEmailAddressModelToCommandMapper(username);
+        IFunction<ChangeEmailAddressModel, ChangeEmailAddress> mapChangeEmailAddressModelToCommand =
+            new ChangeEmailAddressModelToCommandMapper(username);
         ChangeEmailAddress cmd = mapChangeEmailAddressModelToCommand.Apply(model);
 
         await emailAddress.ChangeBy(cmd);

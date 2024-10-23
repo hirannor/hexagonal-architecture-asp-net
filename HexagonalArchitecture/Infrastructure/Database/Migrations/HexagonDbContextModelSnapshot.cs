@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 {
-    [DbContext(typeof(HexagonDbContext))]
+    [DbContext(typeof(CustomersDbContext))]
     partial class HexagonDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -72,6 +72,50 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("CUSTOMERS");
+                });
+
+            modelBuilder.Entity("HexagonalArchitecture.Adapter.Persistence.EntityFramework.CustomerModel", b =>
+                {
+                    b.OwnsOne("HexagonalArchitecture.Adapter.Persistence.EntityFramework.AddressModel", "Address", b1 =>
+                        {
+                            b1.Property<int>("CustomerModelId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("CityName")
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("CITY_NAME");
+
+                            b1.Property<string>("CountryName")
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("COUNTRY_NAME");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("varchar(20)")
+                                .HasColumnName("POSTAL_CODE");
+
+                            b1.Property<string>("StreetName")
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("STREET_NAME");
+
+                            b1.Property<string>("StreetNumber")
+                                .IsRequired()
+                                .HasColumnType("varchar(20)")
+                                .HasColumnName("STREET_NUMBER");
+
+                            b1.HasKey("CustomerModelId");
+
+                            b1.ToTable("CUSTOMERS");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CustomerModelId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

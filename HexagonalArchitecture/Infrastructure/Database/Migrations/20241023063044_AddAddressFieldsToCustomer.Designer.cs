@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CustomersDbContext))]
-    [Migration("20241022094949_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241023063044_AddAddressFieldsToCustomer")]
+    partial class AddAddressFieldsToCustomer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,11 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
                         .HasColumnType("date")
                         .HasColumnName("BIRTH_ON");
 
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("CUSTOMER_ID");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("varchar(200)")
@@ -53,11 +58,6 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
                         .HasColumnType("varchar(200)")
                         .HasColumnName("LAST_NAME");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("CUSTOMER_ID");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("varchar(200)")
@@ -65,16 +65,60 @@ namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmailAddress")
+                    b.HasIndex("CustomerId")
                         .IsUnique();
 
-                    b.HasIndex("CustomerId")
+                    b.HasIndex("EmailAddress")
                         .IsUnique();
 
                     b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("CUSTOMERS");
+                });
+
+            modelBuilder.Entity("HexagonalArchitecture.Adapter.Persistence.EntityFramework.CustomerModel", b =>
+                {
+                    b.OwnsOne("HexagonalArchitecture.Adapter.Persistence.EntityFramework.AddressModel", "Address", b1 =>
+                        {
+                            b1.Property<int>("CustomerModelId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("CityName")
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("CITY_NAME");
+
+                            b1.Property<string>("CountryName")
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("COUNTRY_NAME");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("varchar(20)")
+                                .HasColumnName("POSTAL_CODE");
+
+                            b1.Property<string>("StreetName")
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("STREET_NAME");
+
+                            b1.Property<string>("StreetNumber")
+                                .IsRequired()
+                                .HasColumnType("varchar(20)")
+                                .HasColumnName("STREET_NUMBER");
+
+                            b1.HasKey("CustomerModelId");
+
+                            b1.ToTable("CUSTOMERS");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CustomerModelId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

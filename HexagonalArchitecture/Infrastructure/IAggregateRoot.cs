@@ -6,5 +6,5 @@ public interface IAggregateRoot
 {
     void ClearEvents();
 
-    List<DomainEvent> ListEvents();
+    IReadOnlyList<DomainEvent> ListEvents();
 }

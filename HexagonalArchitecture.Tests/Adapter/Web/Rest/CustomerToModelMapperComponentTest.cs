@@ -8,7 +8,7 @@ using HexagonalArchitecture.Infrastructure;
 namespace DotnetWebApi.Tests.Adapter.Web.Rest;
 
 [DisplayName("CustomerToModelMapper")]
-public class CustomerToModelMapperUnitTest
+public class CustomerToModelMapperComponentTest
 {
     private readonly IFunction<Customer, CustomerModel> _mapUserToModel = new CustomerToModelMapper();
 
@@ -16,25 +16,46 @@ public class CustomerToModelMapperUnitTest
     [DisplayName("should map domain object to model")]
     public void TestSuccessFulMapping()
     {
-        var id = CustomerId.Generate();
+        // given
+        CustomerId id = CustomerId.Generate();
         const string username = "johndoe";
         const string firstName = "John";
         const string lastName = "Doe";
         const string emailAddress = "john.doe@example.com";
-        var birthOn = DateOnly.Parse("1992-02-10");
+        DateOnly birthOn = DateOnly.Parse("1992-02-10");
+        const string streetName = "main st";
+        const string streetNumber = "123";
+        const string cityName = "new york";
+        const string postalCodeValue = "10001";
+        const string countryName = "united states";
 
-        var domain = Customer.From(
+        Customer domain = Customer.From(
             id,
             Username.From(username),
             EmailAddress.From(emailAddress),
             FirstName.From(firstName),
             LastName.From(lastName),
-            DateOfBirth.From(birthOn)
+            DateOfBirth.From(birthOn),
+            Address.From(
+                Street.From(streetName, streetNumber),
+                City.From(cityName),
+                PostalCode.From(postalCodeValue),
+                Country.From(countryName)
+            )
         );
-        var expectedModel = CustomerModel.From(username, emailAddress, firstName, lastName, birthOn);
+        AddressModel expectedAddress = AddressModel.From(
+            StreetModel.From(streetName, streetNumber),
+            postalCodeValue,
+            cityName,
+            countryName
+        );
+        CustomerModel expectedModel =
+            CustomerModel.From(username, emailAddress, firstName, lastName, birthOn, expectedAddress);
 
-        var result = _mapUserToModel.Apply(domain);
+        // when
+        CustomerModel result = _mapUserToModel.Apply(domain);
 
+        // then
         result.Should().BeEquivalentTo(expectedModel);
     }
 

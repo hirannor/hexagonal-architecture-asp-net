@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 
-internal sealed class CustomerEfRepository(HexagonDbContext context) : ICustomerRepository
+internal sealed class CustomerEfRepository(CustomersDbContext context) : ICustomerRepository
 {
     private bool _disposedValue;
 
@@ -48,7 +48,8 @@ internal sealed class CustomerEfRepository(HexagonDbContext context) : ICustomer
     {
         ArgumentNullException.ThrowIfNull(emailAddress, "Email address cannot be null!");
 
-        CustomerModel? model = await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.Value);
+        CustomerModel? model =
+            await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.Value);
 
         return _mapUserModelToDomain.Apply(model);
     }
@@ -76,7 +77,8 @@ internal sealed class CustomerEfRepository(HexagonDbContext context) : ICustomer
     {
         ArgumentNullException.ThrowIfNull(domain, "User cannot be null!");
 
-        CustomerModel? existingModel = await context.Users.FirstOrDefaultAsync(model => model.Username == domain.UserName.Value);
+        CustomerModel? existingModel =
+            await context.Users.FirstOrDefaultAsync(model => model.Username == domain.UserName.Value);
 
         if (existingModel == null)
         {

@@ -47,7 +47,8 @@ public class CustomerRegistrationAndAuthFlowFunctionalTest :
             emailAddress,
             firstName,
             lastName,
-            birthOn
+            birthOn,
+            null
         );
 
         RegisterCustomerModel registerModel = RegisterCustomerModel.From(

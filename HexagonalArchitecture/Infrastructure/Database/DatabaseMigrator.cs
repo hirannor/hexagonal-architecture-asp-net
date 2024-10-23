@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HexagonalArchitecture.Infrastructure.Database;
 
-public class DatabaseMigrator(HexagonDbContext hexagonDbDbContext, AspNetIdentityDbContext aspNetIdentityDbContext)
+public class DatabaseMigrator(CustomersDbContext customersDbDbContext, AspNetIdentityDbContext aspNetIdentityDbContext)
     : IDatabaseMigrator
 {
     public async Task MigrateAsync(CancellationToken cancellationToken)
     {
-        await hexagonDbDbContext.Database.MigrateAsync(cancellationToken);
+        await customersDbDbContext.Database.MigrateAsync(cancellationToken);
         await aspNetIdentityDbContext.Database.MigrateAsync(cancellationToken);
     }
 }

@@ -11,6 +11,33 @@ public class ChangePersonalDetailsModelToCommandMapper(string username)
     {
         if (input is null) return null;
 
-        return ChangePersonalDetails.Issue(username, input.FirstName, input.LastName, input.BirthOn);
+        ChangePersonalDetails.Builder builder = ChangePersonalDetails.Empty(username);
+
+        if (input.BirthOn.HasValue)
+        {
+            builder.WithBirthOn(input.BirthOn.Value);
+        }
+
+        if (input.Address is not null)
+        {
+            builder
+                .WithCountry(input.Address.Country)
+                .WithPostalCode(input.Address.PostalCode)
+                .WithCity(input.Address.City)
+                .WithStreetName(input.Address.Street.StreetName)
+                .WithStreetNumber(input.Address.Street.StreetNumber);
+        }
+
+        if (input.FirstName is not null)
+        {
+            builder.WithFirstName(input.FirstName);
+        }
+
+        if (input.LastName is not null)
+        {
+            builder.WithLastName(input.LastName);
+        }
+
+        return builder.Issue();
     }
 }

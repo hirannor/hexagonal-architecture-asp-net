@@ -11,7 +11,8 @@ public class Customer(
     EmailAddress emailAddress,
     FirstName firstName,
     LastName lastName,
-    DateOfBirth birthOn) : IAggregateRoot
+    DateOfBirth birthOn,
+    Address? address) : IAggregateRoot
 {
     public CustomerId CustomerId { get; } = customerId;
 
@@ -24,6 +25,8 @@ public class Customer(
     public LastName LastName { get; set; } = lastName;
 
     public DateOfBirth BirthOn { get; set; } = birthOn;
+
+    public Address Address { get; set; } = address;
 
     private readonly List<DomainEvent> _domainEvents = [];
 
@@ -38,15 +41,17 @@ public class Customer(
         EmailAddress emailAddress,
         FirstName firstName,
         LastName lastName,
-        DateOfBirth birthOn)
+        DateOfBirth birthOn,
+        Address address)
     {
         return Empty()
-            .UserId(id)
-            .Username(username)
-            .EmailAddress(emailAddress)
-            .FirstName(firstName)
-            .LastName(lastName)
-            .BirthOn(birthOn)
+            .WithUserId(id)
+            .WithUsername(username)
+            .WithEmailAddress(emailAddress)
+            .WithFirstName(firstName)
+            .WithLastName(lastName)
+            .WithBirthOn(birthOn)
+            .WithAddress(address)
             .Create();
     }
 
@@ -56,12 +61,12 @@ public class Customer(
         var username = Username.From(cmd.Username);
 
         var customer = Empty()
-            .UserId(CustomerId.Generate())
-            .Username(username)
-            .EmailAddress(email)
-            .FirstName(FirstName.From(cmd.FirstName))
-            .LastName(LastName.From(cmd.LastName))
-            .BirthOn(DateOfBirth.From(cmd.BirthOn))
+            .WithUserId(CustomerId.Generate())
+            .WithUsername(username)
+            .WithEmailAddress(email)
+            .WithFirstName(FirstName.From(cmd.FirstName))
+            .WithLastName(LastName.From(cmd.LastName))
+            .WithBirthOn(DateOfBirth.From(cmd.BirthOn))
             .Create();
 
         customer._domainEvents.Add(CustomerRegistered.Issue(username, email));
@@ -80,12 +85,32 @@ public class Customer(
 
     public Customer ChangeBy(ChangePersonalDetails cmd)
     {
-        FirstName = FirstName.From(cmd.FirstName);
-        LastName = LastName.From(cmd.LastName);
-        BirthOn = DateOfBirth.From(cmd.BirthOn);
+        if (cmd.FirstName is not null)
+            FirstName = FirstName.From(cmd.FirstName);
+
+        if (cmd.LastName is not null)
+            LastName = LastName.From(cmd.LastName);
+
+        if (cmd.BirthOn.HasValue)
+            BirthOn = DateOfBirth.From(cmd.BirthOn.Value);
+
+        AddressBuilder addressBuilder = Address.Empty();
+
+        if (!string.IsNullOrEmpty(cmd.Country))
+            addressBuilder.WithCountry(Country.From(cmd.Country));
+
+        if (!string.IsNullOrEmpty(cmd.PostalCode))
+            addressBuilder.WithPostalCode(PostalCode.From(cmd.PostalCode));
+
+        if (!string.IsNullOrEmpty(cmd.City))
+            addressBuilder.WithCity(City.From(cmd.City));
+
+        if (!string.IsNullOrEmpty(cmd.StreetName) && !string.IsNullOrEmpty(cmd.StreetNumber))
+            addressBuilder.WithStreet(Street.From(cmd.StreetName, cmd.StreetNumber));
+
+        Address = addressBuilder.Build();
 
         _domainEvents.Add(PersonalDetailsChanged.Issue());
-
         return this;
     }
 
@@ -94,7 +119,7 @@ public class Customer(
         _domainEvents.Clear();
     }
 
-    public List<DomainEvent> ListEvents()
+    public IReadOnlyList<DomainEvent> ListEvents()
     {
         return [.._domainEvents];
     }

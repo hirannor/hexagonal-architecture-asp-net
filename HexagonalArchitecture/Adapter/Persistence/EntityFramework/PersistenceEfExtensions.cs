@@ -24,7 +24,7 @@ public static class PersistenceEfExtensions
 
         services.AddScoped<ICustomerRepository, CustomerEfRepository>();
 
-        services.AddDbContext<HexagonDbContext>(options =>
+        services.AddDbContext<CustomersDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString(ConnectionString)));
 
         return services;

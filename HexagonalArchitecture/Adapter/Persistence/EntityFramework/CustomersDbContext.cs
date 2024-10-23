@@ -2,7 +2,7 @@
 
 namespace HexagonalArchitecture.Adapter.Persistence.EntityFramework;
 
-public class HexagonDbContext(DbContextOptions<HexagonDbContext> options) : DbContext(options)
+public class CustomersDbContext(DbContextOptions<CustomersDbContext> options) : DbContext(options)
 {
     public DbSet<CustomerModel> Users { get; init; }
 

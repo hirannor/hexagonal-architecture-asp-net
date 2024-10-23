@@ -10,10 +10,10 @@ public class JwtTokenGenerator(IConfiguration configuration)
 {
     public string Generate(AuthUser user)
     {
-        Claim[] claims = new[]
+        Claim[] claims =
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(JwtRegisteredClaimNames.Sub, user.UserName),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
         SymmetricSecurityKey key =

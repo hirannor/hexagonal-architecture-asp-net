@@ -22,9 +22,9 @@ internal class CustomerService(
             cmd.Username);
 
         using TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-        
+
         Customer? domain = await customers.FindBy(cmd.Username);
-        
+
         if (domain is null)
         {
             logger.LogWarning("Customer not found with username: {Username}", cmd.Username);
@@ -32,7 +32,7 @@ internal class CustomerService(
         }
 
         EmailAddress newEmail = EmailAddress.From(cmd.NewEmailAddress);
-        
+
         if (domain.EmailAddress.Equals(newEmail))
         {
             logger.LogWarning("Email address: {NewEmailAddress} has already been taken by user: {Username}",
@@ -43,7 +43,7 @@ internal class CustomerService(
         logger.LogInformation("Changing email address in authentication system for user: {Username}", cmd.Username);
 
         Result result = await authentication.ChangeEmailAddress(cmd);
-        
+
         if (!result.IsSuccess)
         {
             logger.LogError("Failed to change the email address in the authentication system for user: {Username}",
@@ -55,10 +55,10 @@ internal class CustomerService(
         await customers.Update(domain);
 
         logger.LogInformation("Successfully changed email address for user: {Username}", cmd.Username);
-        
+
         events.Publish(domain.ListEvents());
         domain.ClearEvents();
-        
+
         scope.Complete();
     }
 
@@ -68,7 +68,7 @@ internal class CustomerService(
             cmd.Username);
 
         Customer? domain = await customers.FindBy(cmd.Username);
-        
+
         if (domain is null)
         {
             logger.LogWarning("Customer not found with username: {Username}", cmd.Username);

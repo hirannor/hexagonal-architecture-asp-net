@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HexagonalArchitecture.Infrastructure.Database.Migrations
 {
-    [DbContext(typeof(HexagonDbContext))]
+    [DbContext(typeof(CustomersDbContext))]
     [Migration("20241022184537_InsertInitialUsers")]
     partial class InsertInitialUsers
     {
