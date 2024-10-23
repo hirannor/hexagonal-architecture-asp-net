@@ -8,7 +8,7 @@ public class ExceptionFilter : IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {
-        var problemDetails = new ProblemDetails
+        ProblemDetails problemDetails = new ProblemDetails
         {
             Title = "An error occurred while processing your request.",
             Status = StatusCodes.Status500InternalServerError,

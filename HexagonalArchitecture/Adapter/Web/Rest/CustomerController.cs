@@ -2,6 +2,7 @@
 using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Application.UseCase;
 using HexagonalArchitecture.Domain;
+using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +27,12 @@ public class CustomerController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ChangePersonalDetailsModel>> ChangePersonalDetails(string username, [FromBody] ChangePersonalDetailsModel model)
     {
-        var mapChangePersonalDetailsModelToCommand = new ChangePersonalDetailsModelToCommandMapper(username);
-        var cmd = mapChangePersonalDetailsModelToCommand.Apply(model);
+        IFunction<ChangePersonalDetailsModel, ChangePersonalDetails> mapChangePersonalDetailsModelToCommand = new ChangePersonalDetailsModelToCommandMapper(username);
+        
+        ChangePersonalDetails cmd = mapChangePersonalDetailsModelToCommand.Apply(model);
 
-        var domain = await personalDetails.ChangeBy(cmd);
-        var changedCustomerModel = _mapCustomerToModel.Apply(domain);
+        Customer domain = await personalDetails.ChangeBy(cmd);
+        CustomerModel changedCustomerModel = _mapCustomerToModel.Apply(domain);
 
         return Ok(changedCustomerModel);
     }
@@ -40,15 +42,15 @@ public class CustomerController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CustomerModel>> DisplayBy(string username)
     {
-        var domain = await customers.DisplayBy(username);
+        Customer? domain = await customers.DisplayBy(username);
 
         if (domain is null)
         {
-            var details = UsernameNotFound(username);
+            ProblemDetails details = UsernameNotFound(username);
             return NotFound(details);
         }
 
-        var model = _mapCustomerToModel.Apply(domain);
+        CustomerModel model = _mapCustomerToModel.Apply(domain);
 
         return Ok(model);
     }
@@ -58,8 +60,8 @@ public class CustomerController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ChangePasswordResultModel>> ChangePassword(string username, [FromBody] ChangePasswordModel model)
     {
-        var mapChangePasswordModelToCommand = new ChangePasswordModelToCommandMapper(username);
-        var cmd = mapChangePasswordModelToCommand.Apply(model);
+        IFunction<ChangePasswordModel, ChangePassword> mapChangePasswordModelToCommand = new ChangePasswordModelToCommandMapper(username);
+        ChangePassword cmd = mapChangePasswordModelToCommand.Apply(model);
 
         await password.ChangeBy(cmd);
 
@@ -73,8 +75,8 @@ public class CustomerController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ChangeEmailAddressResultModel>> ChangeEmailAddress(string username, [FromBody] ChangeEmailAddressModel model)
     {
-        var mapChangeEmailAddressModelToCommand = new ChangeEmailAddressModelToCommandMapper(username);
-        var cmd = mapChangeEmailAddressModelToCommand.Apply(model);
+        IFunction<ChangeEmailAddressModel, ChangeEmailAddress> mapChangeEmailAddressModelToCommand = new ChangeEmailAddressModelToCommandMapper(username);
+        ChangeEmailAddress cmd = mapChangeEmailAddressModelToCommand.Apply(model);
 
         await emailAddress.ChangeBy(cmd);
 

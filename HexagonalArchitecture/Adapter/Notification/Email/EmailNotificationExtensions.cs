@@ -12,14 +12,14 @@ public static class EmailNotificationExtensions
     public static IServiceCollection AddEmailNotificationAdapter(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (EmailValue != adapterSettings.Notification) return services;
+        if (EmailValue != settings.Notification) return services;
 
         services.AddTransient<IEmailNotification, EmailNotification>();
         services.Configure<EmailSettings>(configuration.GetSection(EmailSettings));

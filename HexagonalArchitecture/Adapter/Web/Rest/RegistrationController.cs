@@ -23,7 +23,7 @@ public class RegistrationController(ICustomerRegistration registration)
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<RegistrationResultModel>> Register([FromBody] RegisterCustomerModel customerModel)
     {
-        var cmd = _mapRegisterUserModelToCommand.Apply(customerModel);
+        RegisterCustomer cmd = _mapRegisterUserModelToCommand.Apply(customerModel);
         await registration.Register(cmd);
 
         return Ok(RegistrationResultModel.From("Registration successful!"));

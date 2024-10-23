@@ -12,14 +12,14 @@ public static class WebRestExtensions
 
     public static IServiceCollection AddWebRestAdapter(this IServiceCollection services, IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (RestValue != adapterSettings.Web) return services;
+        if (RestValue != settings.Web) return services;
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

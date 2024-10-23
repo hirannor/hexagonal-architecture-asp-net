@@ -7,19 +7,18 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace DotnetWebApi.Tests.Functional;
 
-[DisplayName("CustomerRegistrationAndAuthFlow")]
-public class CustomerRegistrationAndAuthFlowFunctionalTest :
+[DisplayName("CustomerPersonalDetailsChange")]
+public class CustomerPersonalDetailsChangeFunctionalTest :
     IClassFixture<WebApplicationFactory<Program>>,
     IClassFixture<SqlServerContainerFixture>, IDisposable
 {
     private const string UsersApiBasePath = "/api/customers";
     private const string AuthApiBasePath = "/api/auth";
-    private const string RegisterApiBasePath = "/api/register";
 
     private readonly HttpClient _client;
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
 
-    public CustomerRegistrationAndAuthFlowFunctionalTest(SqlServerContainerFixture fixture)
+    public CustomerPersonalDetailsChangeFunctionalTest(SqlServerContainerFixture fixture)
     {
         var clientOptions = new WebApplicationFactoryClientOptions
         {
@@ -30,18 +29,18 @@ public class CustomerRegistrationAndAuthFlowFunctionalTest :
         _client = _webApplicationFactory.CreateClient(clientOptions);
     }
 
-    [DisplayName("should display customer details after successful registration and authentication")]
+    [DisplayName("should change and display customer with new personal details")]
     [Fact]
-    public async Task DisplayCustomerAfterSuccessfulRegistrationAndAuthentication()
+    public async Task ChangePersonalDetailsAndDisplayCustomerWithNewPersonDetails()
     {
         // given
-        const string username = "user";
-        const string emailAddress = "user@user.com";
-        const string firstName = "John";
-        const string lastName = "Doe";
-        var birthOn = DateOnly.Parse("1992-02-10");
+        const string username = "janedoe";
         const string password = "#TestPassword123";
-
+        const string emailAddress = "jane.doe@localhost.com";
+        const string firstName = "TestFirstName";
+        const string lastName = "TestLastName";
+        DateOnly birthOn = DateOnly.Parse("1992-01-01");
+        ChangePersonalDetailsModel model = ChangePersonalDetailsModel.From(firstName, lastName, birthOn);
         CustomerModel expectedModel = CustomerModel.From(
             username,
             emailAddress,
@@ -50,26 +49,17 @@ public class CustomerRegistrationAndAuthFlowFunctionalTest :
             birthOn
         );
 
-        RegisterCustomerModel registerModel = RegisterCustomerModel.From(
-            username,
-            emailAddress,
-            password,
-            firstName,
-            lastName,
-            birthOn
-        );
-
         SignInModel signInModel = SignInModel.From(username, password);
-
-        await _client.PostAsJsonAsync($"{RegisterApiBasePath}", registerModel);
         HttpResponseMessage authResponse = await _client.PostAsJsonAsync($"{AuthApiBasePath}", signInModel);
         JwtTokenModel? jwtToken = await authResponse.Content.ReadFromJsonAsync<JwtTokenModel>();
 
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken?.value);
 
         // when
-        HttpResponseMessage response = await _client.GetAsync($"{UsersApiBasePath}/{username}");
-        CustomerModel? customerModel = await response.Content.ReadFromJsonAsync<CustomerModel>();
+        await _client.PatchAsJsonAsync($"{UsersApiBasePath}/{username}", model);
+        HttpResponseMessage customerResponse = await _client.GetAsync($"{UsersApiBasePath}/{username}");
+
+        CustomerModel? customerModel = await customerResponse.Content.ReadFromJsonAsync<CustomerModel>();
 
         // then
         customerModel.Should().BeEquivalentTo(expectedModel);

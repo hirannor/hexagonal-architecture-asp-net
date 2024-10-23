@@ -2,7 +2,7 @@
 
 namespace HexagonalArchitecture.Adapter.Persistence.InMemory;
 
-public class CustomerInMemoryRepository : ICustomerRepository
+internal class CustomerInMemoryRepository : ICustomerRepository
 {
     private Dictionary<string, CustomerModel> _users = new();
 
@@ -11,17 +11,17 @@ public class CustomerInMemoryRepository : ICustomerRepository
         throw new NotImplementedException();
     }
 
-    public Task<Customer> FindBy(string username)
+    public Task<Customer?> FindBy(CustomerId id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Customer> FindBy(EmailAddress emailAddress)
+    public Task<Customer?> FindBy(EmailAddress emailAddress)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Customer> FindBy(CustomerId id)
+    public Task<Customer?> FindBy(string username)
     {
         throw new NotImplementedException();
     }

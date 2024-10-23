@@ -2,6 +2,7 @@
 using HexagonalArchitecture.Application.Error;
 using HexagonalArchitecture.Application.Port;
 using HexagonalArchitecture.Application.UseCase;
+using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 
 namespace HexagonalArchitecture.Application;
@@ -16,9 +17,9 @@ public class CustomerPasswordService(
     {
         logger.LogInformation("Attempting to change password for user: {Username}", cmd.Username);
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        using TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        var domain = await customers.DisplayBy(cmd.Username);
+        Customer? domain = await customers.DisplayBy(cmd.Username);
 
         if (domain is null)
         {
@@ -28,7 +29,8 @@ public class CustomerPasswordService(
 
         logger.LogInformation("Changing password for user: {Username}", cmd.Username);
 
-        var result = await authentication.ChangePassword(cmd);
+        Result result = await authentication.ChangePassword(cmd);
+
         if (!result.IsSuccess)
         {
             logger.LogError("Failed to change password for user: {Username}", cmd.Username);
@@ -36,10 +38,10 @@ public class CustomerPasswordService(
         }
 
         logger.LogInformation("Successfully changed password for user: {Username}", cmd.Username);
-        
+
         events.Publish(domain.ListEvents());
         domain.ClearEvents();
-        
+
         scope.Complete();
     }
 }

@@ -11,7 +11,6 @@ public class AspNetIdentityAuthentication(
     : IAuthentication
 {
     private const string EmailAddressAndPasswordIsEmpty = "Email address and password cannot be empty.";
-
     private const string UserNotFound = "User not found.";
     private const string InvalidLoginAttempt = "Invalid login attempt. Please check your credentials.";
     private const string SignInNotAllowed = "Sign in not allowed. Verify your account first.";
@@ -24,7 +23,7 @@ public class AspNetIdentityAuthentication(
             return Result.Failure(["Old email address and new email address cannot be empty."]);
         }
 
-        var user = await userManager.FindByNameAsync(cmd.Username);
+        ApplicationUserModel? user = await userManager.FindByNameAsync(cmd.Username);
 
         if (user == null)
         {
@@ -36,8 +35,8 @@ public class AspNetIdentityAuthentication(
             return Result.Failure(["Old email address does not match the current one."]);
         }
 
-        var token = await userManager.GenerateChangeEmailTokenAsync(user, cmd.NewEmailAddress);
-        var result = await userManager.ChangeEmailAsync(user, cmd.NewEmailAddress, token);
+        string token = await userManager.GenerateChangeEmailTokenAsync(user, cmd.NewEmailAddress);
+        IdentityResult result = await userManager.ChangeEmailAsync(user, cmd.NewEmailAddress, token);
 
         if (!result.Succeeded) return Result.Failure(result.Errors.Select(e => e.Description).ToList());
 
@@ -52,14 +51,14 @@ public class AspNetIdentityAuthentication(
             return Result.Failure(["Old password or new password cannot be empty."]);
         }
 
-        var user = await userManager.FindByNameAsync(cmd.Username);
+        ApplicationUserModel? user = await userManager.FindByNameAsync(cmd.Username);
 
         if (user == null)
         {
             return Result.Failure([UserNotFound]);
         }
 
-        var result = await userManager.ChangePasswordAsync(user, cmd.OldPassword, cmd.NewPassword);
+        IdentityResult result = await userManager.ChangePasswordAsync(user, cmd.OldPassword, cmd.NewPassword);
 
         return result.Succeeded
             ? Result.Success()
@@ -73,21 +72,21 @@ public class AspNetIdentityAuthentication(
             throw new ArgumentException("Username or password cannot be empty!");
         }
 
-        var user = await userManager.FindByNameAsync(cmd.Username);
+        ApplicationUserModel? user = await userManager.FindByNameAsync(cmd.Username);
 
         if (user == null)
         {
             return Result<AuthUser>.Failure([UserNotFound]);
         }
 
-        var signInResult = await signInManager.PasswordSignInAsync(
+        SignInResult result = await signInManager.PasswordSignInAsync(
             cmd.Username,
             cmd.Password,
             isPersistent: false,
             lockoutOnFailure: false
         );
 
-        return signInResult switch
+        return result switch
         {
             { Succeeded: true } => Result<AuthUser>.Success(new AuthUser(user.UserName, user.Email)),
             { IsLockedOut: true } => Result<AuthUser>.Failure([AccountIsLocked]),
@@ -103,9 +102,9 @@ public class AspNetIdentityAuthentication(
             throw new ArgumentException(EmailAddressAndPasswordIsEmpty);
         }
 
-        var user = ApplicationUserModel.From(cmd.Username, cmd.EmailAddress);
+        ApplicationUserModel user = ApplicationUserModel.From(cmd.Username, cmd.EmailAddress);
 
-        var result = await userManager.CreateAsync(user, cmd.Password);
+        IdentityResult result = await userManager.CreateAsync(user, cmd.Password);
 
         return result.Succeeded ? Result.Success() : Result.Failure(result.Errors.Select(e => e.Description).ToList());
     }

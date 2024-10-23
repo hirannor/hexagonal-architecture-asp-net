@@ -16,9 +16,9 @@ internal class CustomerRegistrationService(
 {
     public async Task Register(RegisterCustomer cmd)
     {
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        using TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        var email = EmailAddress.From(cmd.EmailAddress);
+        EmailAddress email = EmailAddress.From(cmd.EmailAddress);
 
         if (await customers.FindBy(email) is not null)
         {
@@ -34,22 +34,22 @@ internal class CustomerRegistrationService(
                 $"Username: {cmd.Username} already in use");
         }
 
-        var domain = Customer.Register(cmd);
+        Customer domain = Customer.Register(cmd);
         await customers.Save(domain);
 
-        var registrationResult = await authentication.Register(cmd);
+        Result result = await authentication.Register(cmd);
 
-        if (!registrationResult.IsSuccess)
+        if (!result.IsSuccess)
         {
             logger.LogError("User registration failed");
-            throw new RegistrationFailed(registrationResult.Errors);
+            throw new RegistrationFailed(result.Errors);
         }
 
         logger.LogInformation("Customer with {username} and {email} was registered successfully", cmd.Username, email);
-        
+
         eventPublishing.Publish(domain.ListEvents());
         domain.ClearEvents();
-        
+
         scope.Complete();
     }
 }

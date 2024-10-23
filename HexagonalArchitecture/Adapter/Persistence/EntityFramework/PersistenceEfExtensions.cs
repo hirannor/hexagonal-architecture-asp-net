@@ -8,23 +8,24 @@ public static class PersistenceEfExtensions
 {
     private const string AdapterSettingsSection = "Adapter";
     private const string EntityFramework = "EntityFramework";
+    private const string ConnectionString = "DefaultConnection";
 
     public static IServiceCollection AddEntityFrameworkPersistenceAdapter(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (EntityFramework != adapterSettings.Persistence) return services;
+        if (EntityFramework != settings.Persistence) return services;
 
         services.AddScoped<ICustomerRepository, CustomerEfRepository>();
 
         services.AddDbContext<HexagonDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(configuration.GetConnectionString(ConnectionString)));
 
         return services;
     }

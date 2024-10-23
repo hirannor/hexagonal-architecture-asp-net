@@ -2,7 +2,7 @@
 
 namespace HexagonalArchitecture.Adapter.Notification.Mock;
 
-public class MockEmailNotification(ILogger<MockEmailNotification> logger)
+internal class MockEmailNotification(ILogger<MockEmailNotification> logger)
     : IEmailNotification
 {
     public Task Send(SendEmailNotification cmd)

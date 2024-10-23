@@ -1,6 +1,7 @@
 ﻿using HexagonalArchitecture.Adapter.Web.Rest.Mapping;
 using HexagonalArchitecture.Adapter.Web.Rest.Model;
 using HexagonalArchitecture.Application.UseCase;
+using HexagonalArchitecture.Domain;
 using HexagonalArchitecture.Domain.Command;
 using HexagonalArchitecture.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -22,10 +23,10 @@ public class AuthController(ICustomerSignIn auth, JwtTokenGenerator jwtToken)
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<JwtTokenModel>> Auth([FromBody] SignInModel model)
     {
-        var cmd = _mapSignInModelToCommand.Apply(model);
-        var authUser = await auth.SignIn(cmd);
+        SignInCustomer cmd = _mapSignInModelToCommand.Apply(model);
+        AuthUser user = await auth.SignIn(cmd);
 
-        var tokenValue = jwtToken.Generate(authUser);
+        string tokenValue = jwtToken.Generate(user);
 
         return Ok(JwtTokenModel.From(tokenValue));
     }

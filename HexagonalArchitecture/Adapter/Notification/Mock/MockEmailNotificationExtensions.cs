@@ -11,14 +11,14 @@ public static class MockEmailNotificationExtensions
     public static IServiceCollection AddMockEmailNotificationAdapter(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (MockValue == adapterSettings.Notification)
+        if (MockValue == settings.Notification)
         {
             services.AddSingleton<IEmailNotification, MockEmailNotification>();
         }

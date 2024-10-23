@@ -10,14 +10,14 @@ public static class EventBusExtensions
 
     public static IServiceCollection AddEventBusAdapter(this IServiceCollection services, IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (EventBusValue != adapterSettings.Messaging) return services;
+        if (EventBusValue != settings.Messaging) return services;
 
         services.AddSingleton<IMessagePublisher, EventBusMessagePublisher>();
         services.AddSingleton<IMessageHandler, EventBusIngestionHandler>();

@@ -11,14 +11,14 @@ public static class InMemoryExtensions
     public static IServiceCollection AddInMemoryPersistenceAdapter(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (InMemory == adapterSettings.Persistence)
+        if (InMemory == settings.Persistence)
         {
             services.AddScoped<ICustomerRepository, CustomerInMemoryRepository>();
         }

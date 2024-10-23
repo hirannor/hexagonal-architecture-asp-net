@@ -7,19 +7,18 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace DotnetWebApi.Tests.Functional;
 
-[DisplayName("CustomerRegistrationAndAuthFlow")]
-public class CustomerRegistrationAndAuthFlowFunctionalTest :
+[DisplayName("CustomerEmailAddressChange")]
+public class CustomerEmailAddressChangeFunctionalTest :
     IClassFixture<WebApplicationFactory<Program>>,
     IClassFixture<SqlServerContainerFixture>, IDisposable
 {
     private const string UsersApiBasePath = "/api/customers";
     private const string AuthApiBasePath = "/api/auth";
-    private const string RegisterApiBasePath = "/api/register";
 
     private readonly HttpClient _client;
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
 
-    public CustomerRegistrationAndAuthFlowFunctionalTest(SqlServerContainerFixture fixture)
+    public CustomerEmailAddressChangeFunctionalTest(SqlServerContainerFixture fixture)
     {
         var clientOptions = new WebApplicationFactoryClientOptions
         {
@@ -30,46 +29,39 @@ public class CustomerRegistrationAndAuthFlowFunctionalTest :
         _client = _webApplicationFactory.CreateClient(clientOptions);
     }
 
-    [DisplayName("should display customer details after successful registration and authentication")]
+    [DisplayName("should change and display customer with new e-mail address")]
     [Fact]
-    public async Task DisplayCustomerAfterSuccessfulRegistrationAndAuthentication()
+    public async Task ChangeEmailAddressAndDisplayCustomer()
     {
         // given
-        const string username = "user";
-        const string emailAddress = "user@user.com";
-        const string firstName = "John";
+        const string username = "janedoe";
+        const string emailAddress = "jane.doe@localhost.com";
+        const string newEmailAddress = "jane.doe_changed@localhost.com";
+        const string firstName = "Jane";
         const string lastName = "Doe";
-        var birthOn = DateOnly.Parse("1992-02-10");
         const string password = "#TestPassword123";
+        DateOnly birthOn = DateOnly.Parse("1995-05-15");
+        ChangeEmailAddressModel model = ChangeEmailAddressModel.From(emailAddress, newEmailAddress);
 
         CustomerModel expectedModel = CustomerModel.From(
             username,
-            emailAddress,
-            firstName,
-            lastName,
-            birthOn
-        );
-
-        RegisterCustomerModel registerModel = RegisterCustomerModel.From(
-            username,
-            emailAddress,
-            password,
+            newEmailAddress,
             firstName,
             lastName,
             birthOn
         );
 
         SignInModel signInModel = SignInModel.From(username, password);
-
-        await _client.PostAsJsonAsync($"{RegisterApiBasePath}", registerModel);
         HttpResponseMessage authResponse = await _client.PostAsJsonAsync($"{AuthApiBasePath}", signInModel);
         JwtTokenModel? jwtToken = await authResponse.Content.ReadFromJsonAsync<JwtTokenModel>();
 
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken?.value);
 
         // when
-        HttpResponseMessage response = await _client.GetAsync($"{UsersApiBasePath}/{username}");
-        CustomerModel? customerModel = await response.Content.ReadFromJsonAsync<CustomerModel>();
+        await _client.PutAsJsonAsync($"{UsersApiBasePath}/{username}/email-address", model);
+        HttpResponseMessage customerResponse = await _client.GetAsync($"{UsersApiBasePath}/{username}");
+
+        CustomerModel? customerModel = await customerResponse.Content.ReadFromJsonAsync<CustomerModel>();
 
         // then
         customerModel.Should().BeEquivalentTo(expectedModel);

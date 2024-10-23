@@ -21,15 +21,18 @@ internal class CustomerService(
         logger.LogInformation("Attempting to change email address for customer with username: {Username}",
             cmd.Username);
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-        var domain = await customers.FindBy(cmd.Username);
+        using TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        
+        Customer? domain = await customers.FindBy(cmd.Username);
+        
         if (domain is null)
         {
             logger.LogWarning("Customer not found with username: {Username}", cmd.Username);
             throw new CustomerNotFound($"Customer has been not found with {cmd.Username}.");
         }
 
-        var newEmail = EmailAddress.From(cmd.NewEmailAddress);
+        EmailAddress newEmail = EmailAddress.From(cmd.NewEmailAddress);
+        
         if (domain.EmailAddress.Equals(newEmail))
         {
             logger.LogWarning("Email address: {NewEmailAddress} has already been taken by user: {Username}",
@@ -39,7 +42,8 @@ internal class CustomerService(
 
         logger.LogInformation("Changing email address in authentication system for user: {Username}", cmd.Username);
 
-        var result = await authentication.ChangeEmailAddress(cmd);
+        Result result = await authentication.ChangeEmailAddress(cmd);
+        
         if (!result.IsSuccess)
         {
             logger.LogError("Failed to change the email address in the authentication system for user: {Username}",
@@ -48,7 +52,7 @@ internal class CustomerService(
         }
 
         domain.ChangeBy(cmd);
-        await customers.Save(domain);
+        await customers.Update(domain);
 
         logger.LogInformation("Successfully changed email address for user: {Username}", cmd.Username);
         
@@ -63,7 +67,8 @@ internal class CustomerService(
         logger.LogInformation("Attempting to change personal details for customer with username: {Username}",
             cmd.Username);
 
-        var domain = await customers.FindBy(cmd.Username);
+        Customer? domain = await customers.FindBy(cmd.Username);
+        
         if (domain is null)
         {
             logger.LogWarning("Customer not found with username: {Username}", cmd.Username);

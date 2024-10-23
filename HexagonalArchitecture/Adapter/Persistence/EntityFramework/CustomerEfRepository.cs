@@ -17,56 +17,10 @@ internal sealed class CustomerEfRepository(HexagonDbContext context) : ICustomer
     private readonly IFunction<CustomerModel, Customer>
         _mapUserModelToDomain = CustomerMappingFactory.UserModelToDomainMapper();
 
-    public async Task<Customer?> FindBy(string username)
+    public void Dispose()
     {
-        ArgumentNullException.ThrowIfNull(username, UserIdentifierCannotBeNull);
-
-        var model = await context.Users.FirstOrDefaultAsync(model => model.Username == username);
-
-        return _mapUserModelToDomain.Apply(model);
-    }
-
-    public async Task<Customer?> FindBy(CustomerId id)
-    {
-        ArgumentNullException.ThrowIfNull(id, UserIdentifierCannotBeNull);
-
-        var model = await context.Users.FirstOrDefaultAsync(model => model.CustomerId == id.Value);
-
-        return _mapUserModelToDomain.Apply(model);
-    }
-
-    public async Task<Customer?> FindBy(EmailAddress emailAddress)
-    {
-        ArgumentNullException.ThrowIfNull(emailAddress, "Email address cannot be null!");
-
-        var model = await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.Value);
-
-        return _mapUserModelToDomain.Apply(model);
-    }
-
-    public async Task Save(Customer domain)
-    {
-        ArgumentNullException.ThrowIfNull(domain, UserCannotBeNull);
-
-        var model = _mapUserToModel.Apply(domain);
-        await context.Users.AddAsync(model);
-
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Update(Customer domain)
-    {
-        ArgumentNullException.ThrowIfNull(domain, "User cannot be null!");
-
-        var existingModel = await context.Users.FirstOrDefaultAsync(model => model.Username == domain.UserName.Value);
-
-        if (existingModel == null)
-        {
-            throw new InvalidOperationException($"User with ID {domain.CustomerId.Value} not found.");
-        }
-
-        CustomerModeller.ApplyChangesFrom(domain).To(existingModel);
-        await context.SaveChangesAsync();
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 
     private void Dispose(bool disposing)
@@ -81,9 +35,55 @@ internal sealed class CustomerEfRepository(HexagonDbContext context) : ICustomer
         _disposedValue = true;
     }
 
-    public void Dispose()
+    public async Task<Customer?> FindBy(CustomerId id)
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        ArgumentNullException.ThrowIfNull(id, UserIdentifierCannotBeNull);
+
+        CustomerModel? model = await context.Users.FirstOrDefaultAsync(model => model.CustomerId == id.Value);
+
+        return _mapUserModelToDomain.Apply(model);
+    }
+
+    public async Task<Customer?> FindBy(EmailAddress emailAddress)
+    {
+        ArgumentNullException.ThrowIfNull(emailAddress, "Email address cannot be null!");
+
+        CustomerModel? model = await context.Users.FirstOrDefaultAsync(model => model.EmailAddress == emailAddress.Value);
+
+        return _mapUserModelToDomain.Apply(model);
+    }
+
+    public async Task<Customer?> FindBy(string username)
+    {
+        ArgumentNullException.ThrowIfNull(username, UserIdentifierCannotBeNull);
+
+        CustomerModel? model = await context.Users.FirstOrDefaultAsync(model => model.Username == username);
+
+        return _mapUserModelToDomain.Apply(model);
+    }
+
+    public async Task Save(Customer domain)
+    {
+        ArgumentNullException.ThrowIfNull(domain, UserCannotBeNull);
+
+        CustomerModel model = _mapUserToModel.Apply(domain);
+        await context.Users.AddAsync(model);
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Update(Customer domain)
+    {
+        ArgumentNullException.ThrowIfNull(domain, "User cannot be null!");
+
+        CustomerModel? existingModel = await context.Users.FirstOrDefaultAsync(model => model.Username == domain.UserName.Value);
+
+        if (existingModel == null)
+        {
+            throw new InvalidOperationException($"User with ID {domain.CustomerId.Value} not found.");
+        }
+
+        CustomerModeller.ApplyChangesFrom(domain).To(existingModel);
+        await context.SaveChangesAsync();
     }
 }

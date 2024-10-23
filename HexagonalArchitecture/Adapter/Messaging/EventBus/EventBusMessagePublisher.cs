@@ -8,7 +8,7 @@ public class EventBusMessagePublisher : IMessagePublisher
 
     public void Publish(IEnumerable<Message> messages)
     {
-        foreach (var message in messages)
+        foreach (Message message in messages)
         {
             OnMessageReceived?.Invoke(this, message);
         }

@@ -6,7 +6,7 @@ public class ApplicationUserModel : IdentityUser
 {
     public static ApplicationUserModel From(string userName, string emailAddress)
     {
-        var user = new ApplicationUserModel
+        ApplicationUserModel user = new ApplicationUserModel
         {
             UserName = userName,
             Email = emailAddress

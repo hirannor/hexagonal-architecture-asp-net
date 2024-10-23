@@ -15,12 +15,14 @@ public class EventBusIngestionHandler(ILogger<EventBusIngestionHandler> logger, 
         switch (message)
         {
             case CustomerRegistered evt:
-                logger.LogDebug("Handling UserCreated event: {evt}", evt);
+                logger.LogDebug("Handling CustomerRegistered event: {evt}", evt);
+
                 notification.Send(SendEmailNotification.Create(
                     evt.EmailAddress.Value,
-                    "User registration",
-                    "User with" + evt.Username.Value + "has been registered successfully.")
+                    "Customer registration",
+                    "Customer with " + evt.Username.Value + " has been registered successfully.")
                 );
+
                 break;
             default:
                 logger.LogWarning("Unhandled event type: {messageType}", message.GetType().Name);

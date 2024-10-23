@@ -14,7 +14,7 @@ internal class AuthenticationService(
     public async Task<AuthUser> SignIn(SignInCustomer cmd)
     {
         logger.LogInformation("Attempting to sign in with username: {cmd}", cmd.Username);
-        var result = await authentication.Login(cmd);
+        Result<AuthUser> result = await authentication.Login(cmd);
 
         if (!result.IsSuccess)
         {

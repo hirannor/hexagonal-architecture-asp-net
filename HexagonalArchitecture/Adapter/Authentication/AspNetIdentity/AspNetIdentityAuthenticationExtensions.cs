@@ -16,14 +16,14 @@ public static class AspNetIdentityAuthenticationExtensions
     public static IServiceCollection AddAspNetIdentityAuthenticationAdapter(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var adapterSettings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
+        AdapterSettings? settings = configuration.GetSection(AdapterSettingsSection).Get<AdapterSettings>();
 
-        if (adapterSettings == null)
+        if (settings == null)
         {
             throw new InvalidOperationException($"Failed to load {AdapterSettingsSection} settings.");
         }
 
-        if (AuthenticationValue != adapterSettings.Authentication) return services;
+        if (AuthenticationValue != settings.Authentication) return services;
 
         var jwtSettings = configuration.GetSection("Jwt");
         var issuer = jwtSettings["Issuer"];
