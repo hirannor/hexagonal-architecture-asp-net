@@ -122,10 +122,10 @@ public class Customer(
     
     private bool ShouldBuildAddress(ChangePersonalDetails cmd)
     {
-        bool shouldBuildAddress = !string.IsNullOrEmpty(cmd.Country) &&
-                                  !string.IsNullOrEmpty(cmd.PostalCode) &&
-                                  !string.IsNullOrEmpty(cmd.City) &&
-                                  !string.IsNullOrEmpty(cmd.StreetName) &&
+        bool shouldBuildAddress = !string.IsNullOrEmpty(cmd.Country) ||
+                                  !string.IsNullOrEmpty(cmd.PostalCode) ||
+                                  !string.IsNullOrEmpty(cmd.City) ||
+                                  !string.IsNullOrEmpty(cmd.StreetName) ||
                                   !string.IsNullOrEmpty(cmd.StreetNumber);
         return shouldBuildAddress;
     }

@@ -29,6 +29,11 @@ public static class AspNetIdentityAuthenticationExtensions
         var issuer = jwtSettings["Issuer"];
         var audience = jwtSettings["Audience"];
         var key = jwtSettings["Key"];
+        
+        if (string.IsNullOrEmpty(key))
+        {
+            throw new InvalidOperationException("JWT key is not configured properly.");
+        }
 
         services.AddDbContext<AspNetIdentityDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

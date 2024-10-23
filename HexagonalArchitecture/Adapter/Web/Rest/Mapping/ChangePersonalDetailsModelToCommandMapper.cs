@@ -24,8 +24,8 @@ public class ChangePersonalDetailsModelToCommandMapper(string username)
                 .WithCountry(input.Address.Country)
                 .WithPostalCode(input.Address.PostalCode)
                 .WithCity(input.Address.City)
-                .WithStreetName(input.Address.Street.StreetName)
-                .WithStreetNumber(input.Address.Street.StreetNumber);
+                .WithStreetName(input.Address.Street?.StreetName)
+                .WithStreetNumber(input.Address.Street?.StreetNumber);
         }
 
         if (input.FirstName is not null)

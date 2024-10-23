@@ -61,7 +61,6 @@ internal class CustomerService(
 
         scope.Complete();
     }
-
     public async Task<Customer> ChangeBy(ChangePersonalDetails cmd)
     {
         logger.LogInformation("Attempting to change personal details for customer with username: {Username}",
@@ -88,21 +87,21 @@ internal class CustomerService(
         return domain;
     }
 
-    public async Task<Customer> DisplayBy(string username)
+    public async Task<Customer?> DisplayBy(string username)
     {
         logger.LogInformation("Retrieving user with {username}", username);
 
         return await customers.FindBy(username);
     }
 
-    public async Task<Customer> DisplayBy(CustomerId id)
+    public async Task<Customer?> DisplayBy(CustomerId id)
     {
         logger.LogInformation("Retrieving user with {id}", id);
 
         return await customers.FindBy(id);
     }
 
-    public async Task<Customer> DisplayBy(EmailAddress emailAddress)
+    public async Task<Customer?> DisplayBy(EmailAddress emailAddress)
     {
         logger.LogInformation("Retrieving user with {emailAddress}", emailAddress.Value);
 
