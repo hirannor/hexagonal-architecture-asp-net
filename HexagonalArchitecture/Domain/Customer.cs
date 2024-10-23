@@ -94,21 +94,17 @@ public class Customer(
         if (cmd.BirthOn.HasValue)
             BirthOn = DateOfBirth.From(cmd.BirthOn.Value);
 
-        AddressBuilder addressBuilder = Address.Empty();
+        if (ShouldBuildAddress(cmd))
+        {
+            AddressBuilder addressBuilder = Address.Empty();
 
-        if (!string.IsNullOrEmpty(cmd.Country))
-            addressBuilder.WithCountry(Country.From(cmd.Country));
+            addressBuilder.WithCountry(Country.From(cmd.Country))
+                .WithPostalCode(PostalCode.From(cmd.PostalCode))
+                .WithCity(City.From(cmd.City))
+                .WithStreet(Street.From(cmd.StreetName, cmd.StreetNumber));
 
-        if (!string.IsNullOrEmpty(cmd.PostalCode))
-            addressBuilder.WithPostalCode(PostalCode.From(cmd.PostalCode));
-
-        if (!string.IsNullOrEmpty(cmd.City))
-            addressBuilder.WithCity(City.From(cmd.City));
-
-        if (!string.IsNullOrEmpty(cmd.StreetName) && !string.IsNullOrEmpty(cmd.StreetNumber))
-            addressBuilder.WithStreet(Street.From(cmd.StreetName, cmd.StreetNumber));
-
-        Address = addressBuilder.Build();
+            Address = addressBuilder.Build();
+        }
 
         _domainEvents.Add(PersonalDetailsChanged.Issue());
         return this;
@@ -122,5 +118,15 @@ public class Customer(
     public IReadOnlyList<DomainEvent> ListEvents()
     {
         return [.._domainEvents];
+    }
+    
+    private bool ShouldBuildAddress(ChangePersonalDetails cmd)
+    {
+        bool shouldBuildAddress = !string.IsNullOrEmpty(cmd.Country) &&
+                                  !string.IsNullOrEmpty(cmd.PostalCode) &&
+                                  !string.IsNullOrEmpty(cmd.City) &&
+                                  !string.IsNullOrEmpty(cmd.StreetName) &&
+                                  !string.IsNullOrEmpty(cmd.StreetNumber);
+        return shouldBuildAddress;
     }
 }
