@@ -188,7 +188,7 @@ curl -X 'PUT'   'http://localhost:5194/api/customers/{username}/password'   -H '
 | janedoe         | #TestPassword123  | jane.doe@localhost.com      |
 | michaeljackson  | #TestPassword123  | michael.jackson@localhost.com |
 | sarahconnor     | #TestPassword123  | sarah.connor@localhost.com  |
-| willsmit        | #TestPassword123  | will.smith@localhost.com    |
+| willsmith       | #TestPassword123  | will.smith@localhost.com    |
 | emilyblunt      | #TestPassword123  | emily.blunt@localhost.com   |
 
 ---
