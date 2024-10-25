@@ -1,31 +1,49 @@
+
 # ASP.NET - Ports-And-Adapters / Hexagonal Architecture with DDD
 
 ## Overview
-This project, developed as a practice exercise to gain familiarity with C# and ASP.NET, follows Hexagonal Architecture (also known as Ports-and-Adapters Architecture) alongside Domain-Driven Design (DDD) principles. It provides a modular, clean, and testable structure, focusing on customer registration, JWT-based authentication, customer information display, and the ability to change customer passwords and email addresses. Despite its simplicity and lack of specific business goals, the project effectively demonstrates modern architectural and development approaches in ASP.NET.
-| Build Status | License |
-|--------------|---------|
+
+This project, developed as a practice exercise to gain familiarity with C# and ASP.NET, follows **Hexagonal Architecture** (also known as Ports-and-Adapters Architecture) alongside **Domain-Driven Design** (DDD) principles. 
+The project provides a modular, clean, and testable structure, focusing on:
+- Customer registration and JWT-based authentication
+- Displaying customer's personal details
+- Modifying personal details
+- Changing password
+- Changing email address
+
+Despite its simplicity, this project demonstrates a modern approach to ASP.NET architecture.
+
+| Build Status                                                                                           | License                                                                                           |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | [![Build Status](https://img.shields.io/github/actions/workflow/status/hirannor/hexagonal-architecture-asp-net-core/.github/workflows/dotnet.yml)](https://github.com/hirannor/hexagonal-architecture-asp-net-core/actions/workflows/dotnet.yml) | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) |
 
-## Prerequisites for Development:
-- **.NET 8.0 SDK**: The project is built on the .NET 8.0 framework, so having the latest SDK is essential.
-- **Visual Studio or VS Code**: Any modern IDE that supports .NET development, such as Visual Studio 2022 or Visual Studio Code with C# extensions, is recommended.
-- **Docker**: Required for running containers, especially for integration testing with Testcontainers.
-- **SQL Server**: The project relies on SQL Server for persistence, so a local or cloud instance should be available.
+---
 
-## Used Technologies (programming languages, frameworks, libraries, etc.):
-- **.NET 8.0**: The latest version of .NET for performance improvements, security, and modern features.
-- **ASP.NET Core**: The framework used for building the Web API and handling HTTP requests.
-- **Entity Framework Core (EF Core)**: Provides an ORM for interacting with a SQL Server database, simplifying CRUD operations.
-- **MailKit**: A library for sending emails, which is useful in user notification scenarios.
-- **XUnit**: The testing framework used for unit testing the application components.
-- **Moq**: A mocking library for creating test doubles, allowing for isolated unit tests.
-- **TestContainers**: Used for running Docker containers within tests, enabling integration testing with SQL Server in an isolated environment.
-- **Fluent Assertions**: A library that provides a more readable and fluent syntax for making assertions in tests.
+## Prerequisites for Development
+
+- **.NET 8.0 SDK**: Latest .NET SDK for optimal performance and security
+- **Visual Studio or VS Code**: IDEs that support .NET development, such as Visual Studio 2022 or VS Code with C# extensions
+- **Docker**: For containerized testing, especially with Testcontainers for integration testing
+- **SQL Server**: Required as the primary database for persistence
+
+## Technology Stack
+
+- **.NET 8.0**: The latest .NET platform, offering performance enhancements and new features
+- **ASP.NET Core**: Framework for building the REST API and handling HTTP requests
+- **Entity Framework Core**: ORM for database interactions with SQL Server
+- **MailKit**: SMTP email library for user notifications
+- **XUnit & Moq**: Testing frameworks for unit and integration testing
+- **Testcontainers**: For Docker-based integration testing with SQL Server
+- **Fluent Assertions**: Provides a fluent syntax for assertions in unit tests
+
+---
 
 ## Adapter Configuration
-The project follows the **Hexagonal Architecture** pattern, making it highly configurable with different adapters for key functionalities. In the `appsettings.json` or `appsettings.Development.json` file, you can define which adapters to use for various layers of the application.
 
-Here’s a sample configuration:
+Following Hexagonal Architecture principles, this project is highly modular and configurable. You can specify the adapters for various application layers in `appsettings.json` or `appsettings.Development.json`.
+
+### Sample Configuration
+
 ```json
 {
   "Adapter": {
@@ -38,58 +56,143 @@ Here’s a sample configuration:
 }
 ```
 
-### Available adapters:
-- **Authentication**:
-  - AspNetIdentity (based on ASP.NET Identity for managing authentication and user roles)
-- **Persistence**:
-  - EntityFramework (uses Entity Framework Core for data storage)
-  - InMemory (a demonstration adapter, not fully implemented)
-- **Notification**:
-  - Email (uses MailKit for email notifications)
-  - Mock (for testing purposes)
-- **Messaging**:
-  - EventBus (for event-driven communication)
-- **Web**:
-  - Rest (enables the REST API for user interaction)
+### Available Adapters
 
-### Important Notes:
-- If you are using the Entity Framework persistence adapter, ensure to replace the connection string in `appsettings.json` or `appsettings.Development.json` (based on your requirements) with a correct one and have a running SQL database, like MS SQL.
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "<YOUR_CONNECTION_STRING>"
+- **Authentication**:
+  - AspNetIdentity (manages authentication and roles using ASP.NET Identity)
+- **Persistence**:
+  - EntityFramework (primary storage with SQL Server)
+  - InMemory (demonstration adapter, not fully implemented)
+- **Notification**:
+  - Email (SMTP notifications via MailKit)
+  - Mock (for testing)
+- **Messaging**:
+  - EventBus (event-driven communication)
+- **Web**:
+  - Rest (enables REST API for user interaction)
+
+#### Important Notes:
+
+- **Persistence Adapter**: Ensure to provide a valid SQL Server connection string for `DefaultConnection`.
+
+  ```json
+  {
+    "ConnectionStrings": {
+      "DefaultConnection": "<YOUR_CONNECTION_STRING>"
+    }
   }
-}
-```
-- For the Email adapter, make sure to provide the correct SMTP settings in the EmailSettings section in `appsettings.json` or `appsettings.Development.json` (based on your requirements), including the server, port, username, and password for sending emails.
-```json
-{
-  "EmailSettings": {
-    "SmtpServer": "smtp.yourprovider.com",
-    "Port": 587,
-    "Username": "your-email@example.com",
-    "Password": "your-email-password",
-    "FromEmail": "your-email@example.com"
+  ```
+
+- **Email Adapter**: Configure SMTP details for sending emails.
+
+  ```json
+  {
+    "EmailSettings": {
+      "SmtpServer": "smtp.yourprovider.com",
+      "Port": 587,
+      "Username": "your-email@example.com",
+      "Password": "your-email-password",
+      "FromEmail": "your-email@example.com"
+    }
   }
-}
- ```
+  ```
+
+---
 
 ## API Documentation
-For testing and exploring the API, the project includes **Swagger UI**. Once the project is running locally, you can access the API documentation and try out the endpoints at:
 
-[http://localhost:5194/swagger/index.html](http://localhost:5194/swagger/index.html)
+For detailed API exploration, you can access **Swagger UI** at [http://localhost:5194/swagger/index.html](http://localhost:5194/swagger/index.html).
 
-The Swagger UI provides an easy interface to interact with the API, offering insights into the available endpoints, input parameters, and response formats.
+### Available Endpoints
 
-![Preview](Images/swagger-ui.jpg)
+#### **Registration**
 
+Registers a new user with the system.
 
-## Pre-defined customer credentials
+```
+curl -X 'POST'   'http://localhost:5194/api/register'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+    "username": "mockuser",
+    "emailAddress": "mock.user@local.com",
+    "password": "#TestPassword123",
+    "firstName": "Mock",
+    "lastName": "User",
+    "birthOn": "1990-01-01"
+  }'
+```
 
-| Username          | Password            | Email Address
-|-------------------|---------------------|-------------------------------|
-| janedoe           | #TestPassword123    |jane.doe@localhost.com         |
-| michaeljackson    | #TestPassword123    |michael.jackson@localhost.com  |
-| sarahconnor       | #TestPassword123    |sarah.connor@localhost.com     |
-| willsmit          | #TestPassword123    |will.smith@localhost.com       |
-| emilyblunt        | #TestPassword123    |emily.blunt@localhost.com      |
+#### **Authentication**
+
+Authenticates a user and returns a JWT token.
+
+```
+curl -X 'POST'   'http://localhost:5194/api/auth'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+    "username": "mockuser",
+    "password": "#TestPassword123"
+  }'
+```
+
+#### **Get Personal Details**
+
+Fetches the details of a specific user.
+
+```
+curl -X 'GET'   'http://localhost:5194/api/customers/{username}'   -H 'accept: application/json'   -H 'Authorization: Bearer {your_jwt_token}'
+```
+
+#### **Change Personal Details**
+
+Updates a user's personal information.
+
+```
+curl -X 'PATCH'   'http://localhost:5194/api/customers/{username}'   -H 'accept: application/json'   -H 'Authorization: Bearer {your_jwt_token}'   -H 'Content-Type: application/json'   -d '{
+    "address": {
+      "street": {
+        "streetName": "Main Street",
+        "streetNumber": "123"
+      },
+      "postalCode": "12345",
+      "city": "Sample City",
+      "country": "Sample Country"
+    }
+  }'
+```
+
+#### **Change Email Address**
+
+Changes the user’s registered email address.
+
+```
+curl -X 'PUT'   'http://localhost:5194/api/customers/{username}/email-address'   -H 'accept: application/json'   -H 'Authorization: Bearer {your_jwt_token}'   -H 'Content-Type: application/json'   -d '{
+    "oldEmailAddress": "old.user@localhost.com",
+    "newEmailAddress": "new.user@localhost.com"
+  }'
+```
+
+#### **Change Password**
+
+Updates a user's password.
+
+```
+curl -X 'PUT'   'http://localhost:5194/api/customers/{username}/password'   -H 'accept: application/json'   -H 'Authorization: Bearer {your_jwt_token}'   -H 'Content-Type: application/json'   -d '{
+    "oldPassword": "#TestPassword123",
+    "newPassword": "#NewPassword456"
+  }'
+```
+
+---
+
+## Pre-defined Customer Credentials
+
+| Username        | Password          | Email Address               |
+|-----------------|-------------------|-----------------------------|
+| janedoe         | #TestPassword123  | jane.doe@localhost.com      |
+| michaeljackson  | #TestPassword123  | michael.jackson@localhost.com |
+| sarahconnor     | #TestPassword123  | sarah.connor@localhost.com  |
+| willsmit        | #TestPassword123  | will.smith@localhost.com    |
+| emilyblunt      | #TestPassword123  | emily.blunt@localhost.com   |
+
+---
+
+## Development and Contribution
+
+To run the project locally, ensure SQL Server is configured, Docker is running for Testcontainers, and the required connection strings and email settings are properly set. Contributions are welcome to further improve this example. Please follow the coding standards, and consider submitting issues or feature requests if you notice areas of improvement.
